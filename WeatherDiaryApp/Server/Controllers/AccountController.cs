@@ -14,7 +14,15 @@ namespace Server.Controllers
         [HttpPost]
         public IActionResult Login(LoginModel model)
         {
-            return Ok();
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Неправильные логин и (или) пароль");
+                return View(model);
+            }
+
+            // Logic for checking whether user registered
+
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
@@ -26,7 +34,16 @@ namespace Server.Controllers
         [HttpPost]
         public IActionResult Register(RegisterModel model)
         {
-            return Ok();
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Неправильные почта и (или) пароль");
+                return View(model);
+            }
+
+            // Checking whether user already registered
+            // Registering if not -> Redirect to Login
+            // Error - otherwise
+            return RedirectToAction("Login");
         }
     }
 }
