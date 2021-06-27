@@ -1,8 +1,8 @@
 namespace Server.Models
 {
-    internal enum TimesOfDay
+    public enum TimesOfDay
     {
-        Morning,
+        Day,
         Evening
     }
 }
