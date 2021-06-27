@@ -1,10 +1,14 @@
 namespace Server.Models
 {
-    internal enum WindDirection
+    public enum WindDirection
     {
-        North,
-        South,
-        East,
-        West
+        N,
+        NW,
+        NE,
+        S,
+        SW,
+        SE,
+        W,
+        E,
     }
 }
