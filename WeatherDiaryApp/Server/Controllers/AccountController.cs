@@ -26,7 +26,7 @@ namespace Server.Controllers
                 return View(model);
             }
 
-            // Logic for checking whether user registered
+            // TODO
 
             return RedirectToAction("Index", "Home");
         }
@@ -46,9 +46,8 @@ namespace Server.Controllers
                 return View(model);
             }
 
-            // Checking whether user already registered
-            // Registering if not -> Redirect to Login
-            // Error - otherwise
+            // TODO
+
             return RedirectToAction("Login");
         }
 
