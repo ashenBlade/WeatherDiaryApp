@@ -2,7 +2,7 @@
 
 namespace Server.Models
 {
-    class WeatherIndicator
+    public class WeatherIndicator
     {
         public int Temperature { get; set; }
         public int Pressure { get; set; }

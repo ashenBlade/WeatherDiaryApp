@@ -1,10 +1,11 @@
 namespace Server.Models
 {
-    internal enum Cloudy
+    public enum Cloudy
     {
-        Clearly,
+        Cloudless,
         PartlyCloud,
-        CloudCoverWithClarifications,
-        Cloudy
+        AverageCloud,
+        CloudWithGaps,
+        SolidCloud
     }
 }
