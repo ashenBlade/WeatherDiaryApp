@@ -15,11 +15,11 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginModel model)
+        public async Task<IActionResult> Login(LoginModel model)
         {
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Неправильные логин и (или) пароль");
+                ModelState.AddModelError("", "Неправильные почта и (или) пароль");
                 return View(model);
             }
 
@@ -35,7 +35,7 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(RegisterModel model)
+        public async Task<IActionResult> Register(RegisterModel model)
         {
             if (!ModelState.IsValid)
             {
