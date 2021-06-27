@@ -10,5 +10,6 @@ namespace Server.Models
         public WindDirection WindDirection { get; set; }
         public Cloudy Cloudy { get; set; }
         public Precipitation Precipitation { get; set; }
+        public Phenomena Phenomena { get; set; }
     }
 }
