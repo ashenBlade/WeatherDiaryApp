@@ -38,7 +38,7 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterModel model)
+        public IActionResult Register(RegisterModel model)
         {
             if (!ModelState.IsValid)
             {
