@@ -1,7 +1,8 @@
-@model LoginModel
+﻿@model LoginModel
 
 @{
-    ViewData["Title"] = "Login";
+    ViewBag.Title = "Login";
+    Layout = "_Layout";
 }
 
 <!DOCTYPE html>
@@ -15,15 +16,15 @@
     <div class="text-center">
         <h1 class="display-4">Вход</h1>
         <br /><br />
-        <form method="post" action="~/Account/Login">
-            <input type="email" name="email" />
-            <br /><br />
-            <input type="password" name="password" />
-            <br /><br />
-            <p>Ещё не зарегистрировались?</p>
-            <br /><br /><br /><br />
-            <input type="submit" value="Войти" />
-        </form>
+              <form method="post" action="~/Account/Login">
+                  <input type="email" name="email" placeholder="email" />
+                  <br /><br />
+                  <input type="password" name="password" placeholder="пароль" />
+                  <br /><br />
+                  <a href="~/Account/Register">Ещё не зарегистрировались?</a>
+                  <br /><br />
+                  <input type="submit" value="Войти" />
+              </form>
     </div>
 </body>
 </html>

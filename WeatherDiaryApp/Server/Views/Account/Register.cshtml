@@ -1,9 +1,32 @@
-@model RegisterModel
+﻿@model RegisterModel
 
 @{
     ViewBag.Title = "Register";
     Layout = "_Layout";
 }
 
-<h2>Register</h2>
-
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/StyleSheet.css" />
+    <title>Login</title>
+</head>
+<body>
+    <div class="text-center">
+        <h1 class="display-4">Регистрация</h1>
+        <br /><br />
+              <form method="post" action="~/Account/Register">
+                  <input type="email" name="email" placeholder="email" />
+                  <br /><br />
+                  <input type="password" name="password" placeholder="пароль" />
+                  <br /><br />
+                  <input type="password" name="repeat_password" placeholder="повторите пароль" />
+                  <br /><br />
+                  <a href="~/Account/Login">Уже есть аккаунт?</a>
+                  <br /><br />
+                  <input type="submit" value="Зарегистрироваться" />
+              </form>
+    </div>
+</body>
+</html>
