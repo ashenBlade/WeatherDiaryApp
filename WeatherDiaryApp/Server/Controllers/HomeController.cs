@@ -20,12 +20,20 @@ namespace Server.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var model = new HomeVM();
+            return View(model);
         }
 
-        public IActionResult Privacy()
+        public IActionResult Create()
         {
-            return View();
+            var model = new CreateVM();
+            return View(model);
+        }
+
+        public IActionResult Stop()
+        {
+            var model = new StopVM();
+            return View(model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

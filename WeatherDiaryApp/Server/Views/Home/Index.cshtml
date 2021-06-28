@@ -1,8 +1,52 @@
-﻿@{
+﻿@model HomeVM
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/StyleSheet.css" />
+    <title>Index</title>
+</head>
+<body>
+    <div class="text-center">
+        <h1 class="display-4">Показать дневник погоды</h1>
+        <p>Выберите дневник, который хотите посмотреть</p>
+        <br><br>
+            <form>
+                <table class="left_table">
+                    @foreach (var item in Model.Citys)
+                    {
+                        <tr>
+                            <td>
+                                <input type="radio" name="city" value="@item" />
+                            </td>
+                            <td class="text_enumeration">
+                                <div>@item.ToString()</div>
+                            </td>
+                        </tr>
+                    }
+                </table>
+                <table class="right_table">
+                    @foreach (var item in Model.WeatherСonditions)
+                    {
+                        <tr>
+                            <td vertical-align: central>
+                                <div>
+                                    <input type="checkbox" name="city" value="@item" />
+                                </div>
+                            </td>
+                            <td class="text_enumeration">
+                                <div>@item.ToString()</div>
+                            </td>
+                        </tr>
+                    }
+                </table>
+                <br><br><br><br>
+                <input type="submit" value="Показать дневник" />
+            </form>
+    </div>
+    </body>
+    </html>
