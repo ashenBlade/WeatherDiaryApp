@@ -1,8 +1,28 @@
 @model LoginModel
 
 @{
-    ViewBag.Title = "Login";
-    Layout = "_Layout";
+    ViewData["Title"] = "Login";
 }
 
-<h2>Login into account</h2>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="stylesheet" href="~/css/StyleSheet.css" />
+    <title>Login</title>
+</head>
+<body>
+    <div class="text-center">
+        <h1 class="display-4">Вход</h1>
+        <br /><br />
+        <form method="post" action="~/Account/Login">
+            <input type="email" name="email" />
+            <br /><br />
+            <input type="password" name="password" />
+            <br /><br />
+            <p>Ещё не зарегистрировались?</p>
+            <br /><br /><br /><br />
+            <input type="submit" value="Войти" />
+        </form>
+    </div>
+</body>
+</html>
