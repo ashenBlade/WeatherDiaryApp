@@ -30,6 +30,7 @@ namespace Server
                     .AddCookie(options =>
                                {
                                    options.LoginPath = new PathString("/Account/Login");
+                                   options.LogoutPath = new PathString("/Account/Logout");
                                }
                               );
         }
