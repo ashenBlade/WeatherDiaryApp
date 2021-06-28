@@ -18,23 +18,15 @@ namespace Server.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
-        {
-            var model = new HomeVM();
-            return View(model);
-        }
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
 
-        public IActionResult Create()
-        {
-            var model = new CreateVM();
-            return View(model);
-        }
-
-        public IActionResult Stop()
-        {
-            var model = new StopVM();
-            return View(model);
-        }
+        //public IActionResult Privacy()
+        //{
+        //    return View();
+        //}
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
