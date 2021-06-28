@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Server.Models
+namespace Database
 {
     public class WeatherIndicator
     {
