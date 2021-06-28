@@ -7,91 +7,104 @@ namespace Database
 {
     public class WeatherDiaryRepository : IWeatherDiaryRepository
     {
-        public DbContextOptions<WeatherDiaryContext> contextOptions { get; set; }
+        private DbContextOptions<WeatherDiaryContext> ContextOptions { get; set; }
 
         public WeatherDiaryRepository (string connectionString)
         {
-            contextOptions = new DbContextOptionsBuilder<WeatherDiaryContext>()
+            ContextOptions = new DbContextOptionsBuilder<WeatherDiaryContext>()
                 .UseSqlite(connectionString)
                 .Options;
         }
 
         public User AddUser (string email, string password)
         {
-            using (var context = new WeatherDiaryContext(contextOptions))
-            {
-                var user = new User { Email = email, Password = password };
-                context.Users.Add(user);
-                context.SaveChanges();
-                return user;
-            }
+            using var context = new WeatherDiaryContext(ContextOptions);
+            var user = new User { Email = email, Password = password };
+            context.Users.Add(user);
+            context.SaveChanges();
+            return user;
         }
 
         public bool ContainsUser (string email)
         {
-            using (var context = new WeatherDiaryContext(contextOptions))
-            {
-                return context.Users
-                    .Any(x => x.Email == email);
-            }
+            using var context = new WeatherDiaryContext(ContextOptions);
+            return context.Users
+                .Any(x => x.Email == email);
+        }
+
+        public City GetCity (string name)
+        {
+            using var context = new WeatherDiaryContext(ContextOptions);
+            return context.Cities
+                .Include(c => c.UserCities)
+                    .ThenInclude(uc => uc.User)
+                .Include(c => c.WeatherRecords)
+                    .ThenInclude(wr => wr.WeatherIndicator)
+                .FirstOrDefault(c => c.Name == name);
         }
 
         public List<WeatherRecord> GetRecords (User user, City city, DateTime date)
         {
-            using (var context = new WeatherDiaryContext(contextOptions))
-            {
-                user = context.Users.Find(user.Id);
-                city = user.Cities.FirstOrDefault(c => c.Id == city.Id);
-                var connection = user.Connections.FirstOrDefault(c => c.CityId == city.Id && c.DateStart.Month <= date.Month && c.DateEnd?.Month >= date.Month);
-                return city.WeatherRecords.Where(wr => wr.Date.Month >= connection.DateStart.Month && wr.Date.Month <= connection.DateEnd?.Month).ToList();
-            }
+            using var context = new WeatherDiaryContext(ContextOptions);
+            var userCity = context.UserCities
+                .Include(uc => uc.City)
+                    .ThenInclude(c => c.WeatherRecords)
+                        .ThenInclude(wr => wr.WeatherIndicator)
+                .FirstOrDefault(uc =>
+                    uc.UserId == user.Id &&
+                    uc.CityId == city.Id &&
+                    uc.DateStart <= date &&
+                    (!uc.DateEnd.HasValue || uc.DateEnd.Value >= date));
+            return userCity.City.WeatherRecords
+                .Where(wr =>
+                    wr.Date >= userCity.DateStart &&
+                    (!userCity.DateEnd.HasValue || wr.Date <= userCity.DateEnd))
+                .ToList();
         }
 
         public User GetUser (string email, string password)
         {
-            using (var context = new WeatherDiaryContext(contextOptions))
-            {
-                return context.Users
-                    .FirstOrDefault(user => user.Email == email && user.Password == password);
-            }
+            using var context = new WeatherDiaryContext(ContextOptions);
+            return context.Users
+                .Include(u => u.UserCities)
+                    .ThenInclude(uc => uc.City)
+                .FirstOrDefault(user =>
+                    user.Email == email &&
+                    user.Password == password);
         }
 
         public void SaveRecord (WeatherRecord record)
         {
-            using (var context = new WeatherDiaryContext(contextOptions))
-            {
-                var city = context.Cities.Find(record.City.Id);
-                city.WeatherRecords.Add(record);
-                context.SaveChanges();
-            }
+            using var context = new WeatherDiaryContext(ContextOptions);
+            var city = context.Cities.Find(record.City.Id);
+            record.City = city;
+            context.WeatherRecords.Add(record);
+            context.SaveChanges();
         }
 
         public void StartDiary (User user, City city)
         {
-            using (var context = new WeatherDiaryContext(contextOptions))
+            using var context = new WeatherDiaryContext(ContextOptions);
+            user = context.Users.Find(user.Id);
+            city = context.Cities.Find(city.Id);
+            context.UserCities.Add(new UserCity
             {
-                user = context.Users.Find(user.Id);
-                city = context.Cities.Find(city.Id);
-                user.Cities.Add(city);
-                city.Users.Add(user);
-                context.Users.Update(user);
-                context.Cities.Update(city);
-                context.SaveChanges();
-            }
+                User = user,
+                City = city,
+                DateStart = DateTime.Now
+            });
+            context.SaveChanges();
         }
 
         public void StopDiary (User user, City city)
         {
-            using (var context = new WeatherDiaryContext(contextOptions))
-            {
-                city = context.Cities.Find(city.Id);
-                var connection = city.Connections.Find(c => c.UserId == user.Id);
-                connection.DateEnd = DateTime.Now;
-                context.Cities.Update(city);
-                user = context.Users.FirstOrDefault(u => u.Id == user.Id);
-                context.Users.Update(user);
-                context.SaveChanges();
-            }
+            using var context = new WeatherDiaryContext(ContextOptions);
+            var userCity = context.UserCities.FirstOrDefault(uc =>
+                uc.UserId == user.Id &&
+                uc.CityId == city.Id &&
+                !uc.DateEnd.HasValue);
+            userCity.DateEnd = DateTime.Now;
+            context.SaveChanges();
         }
     }
 }
