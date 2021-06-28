@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Server.Models;
 
 namespace Server.Controllers
 {
+    [Authorize]
     public class DiaryController : Controller
     {
         [HttpGet]
