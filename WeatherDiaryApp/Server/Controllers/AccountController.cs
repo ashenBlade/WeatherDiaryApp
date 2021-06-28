@@ -28,7 +28,7 @@ namespace Server.Controllers
 
             // TODO
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Get", "Diary");
         }
 
         [HttpGet]
