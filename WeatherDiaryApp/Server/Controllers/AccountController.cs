@@ -30,22 +30,25 @@ namespace Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel viewModel)
         {
+            const string errorMessage = "Неправильные почта и (или) пароль";
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Неправильные почта и (или) пароль");
+                ModelState.AddModelError("", errorMessage);
                 return View(viewModel);
             }
 
-            if (!_repository.ContainsUser(viewModel.Email))
+            var userRegistered = _repository.ContainsUser(viewModel.Email);
+
+            if (!userRegistered)
             {
-                ModelState.AddModelError("", "Пользователя с такой почтой не существует");
+                ModelState.AddModelError("", errorMessage);
                 return View(viewModel);
             }
 
             var dbUser = _repository.GetUser(viewModel.Email, viewModel.Password);
             if (dbUser is null)
             {
-                ModelState.AddModelError("", "Неправильные почта и (или) пароль");
+                ModelState.AddModelError("", errorMessage);
                 return View(viewModel);
             }
 
