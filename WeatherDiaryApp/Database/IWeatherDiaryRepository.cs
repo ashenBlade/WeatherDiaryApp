@@ -9,7 +9,9 @@ namespace Database
 
         bool ContainsUser (string userEmail);
 
-        List<City> GetAllCities ();
+        List<string> GetAllCities ();
+
+        List<string> GetCitiesForUser (string userEmail);
 
         City GetCity (string name);
 

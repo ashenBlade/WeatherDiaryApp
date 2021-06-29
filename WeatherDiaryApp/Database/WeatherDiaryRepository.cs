@@ -40,13 +40,23 @@ namespace Database
                 .Any(x => x.Email == email);
         }
 
-        public List<City> GetAllCities ()
+        public List<string> GetAllCities ()
         {
             using var context = new WeatherDiaryContext(ContextOptions);
             return context.Cities
-                .Include(c => c.UserCities)
-                .Include(c => c.WeatherRecords)
-                    .ThenInclude(wr => wr.WeatherIndicator)
+                .Select(c => c.Name)
+                .ToList();
+        }
+
+        public List<string> GetCitiesForUser (string userEmail)
+        {
+            using var context = new WeatherDiaryContext(ContextOptions);
+            var user = context.Users
+                .Include(u => u.UserCities)
+                    .ThenInclude(uc => uc.City)
+                    .FirstOrDefault(u => u.Email == userEmail);
+            return user.UserCities
+                .Select(uc => uc.City.Name)
                 .ToList();
         }
 
