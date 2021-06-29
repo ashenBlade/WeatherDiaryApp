@@ -17,8 +17,8 @@ namespace Database
 
         void SaveRecord (WeatherRecord record);
 
-        void StartDiary (User user, City city);
+        void StartDiary (string email, City city);
 
-        void StopDiary (User user, City city);
+        void StopDiary (string email, City city);
     }
 }
