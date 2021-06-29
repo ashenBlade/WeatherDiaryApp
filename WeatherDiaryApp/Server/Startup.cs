@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Database;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,6 +34,7 @@ namespace Server
                                    options.LogoutPath = new PathString("/Account/Logout");
                                }
                               );
+            ConfigureRepository(services, Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,6 +65,13 @@ namespace Server
                                              name: "default",
                                              pattern: "{controller=Diary}/{action=Get}/{id?}");
             });
+        }
+
+        private static IServiceCollection ConfigureRepository(IServiceCollection services, IConfiguration configuration)
+        {
+            var connection = configuration.GetConnectionString("debug");
+            services.AddTransient<IWeatherDiaryRepository>(s => new WeatherDiaryRepository(connection));
+            return services;
         }
     }
 }

@@ -1,17 +1,26 @@
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Common;
+using Database;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Server.Models;
+using User = Common.User;
 
 namespace Server.Controllers
 {
     public class AccountController : Controller
     {
+        private IWeatherDiaryRepository _repository;
+        public AccountController(IWeatherDiaryRepository repository)
+        {
+            _repository = repository ?? throw new NullReferenceException(nameof(repository));
+        }
+
         [HttpGet]
         public IActionResult Login()
         {
@@ -27,7 +36,22 @@ namespace Server.Controllers
                 return View(model);
             }
 
-            // TODO
+            if (!_repository.ContainsUser(model.Email))
+            {
+                ModelState.AddModelError("", "Пользователя с такой почтой не существует");
+                return View(model);
+            }
+
+            var dbUser = _repository.GetUser(model.Email, model.Password);
+            if (dbUser is null)
+            {
+                ModelState.AddModelError("", "Неправильные почта и (или) пароль");
+                return View(model);
+            }
+
+            var user = new User() { Email = dbUser.Email, Password = dbUser.Password };
+
+            await Authenticate(HttpContext, user);
 
             return RedirectToAction("Get", "Diary");
         }
@@ -47,7 +71,19 @@ namespace Server.Controllers
                 return View(model);
             }
 
-            // TODO
+            var userAlreadyRegistered = _repository.ContainsUser(model.Email);
+            if (userAlreadyRegistered)
+            {
+                ModelState.AddModelError("", "Пользователь с такой почтой уже зарегистрирован");
+                return View(model);
+            }
+
+            var user = _repository.AddUser(model.Email, model.Password);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Извините. Что-то пошло не так");
+                return View(model);
+            }
 
             return RedirectToAction("Login");
         }
