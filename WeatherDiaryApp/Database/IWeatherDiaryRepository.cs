@@ -7,20 +7,20 @@ namespace Database
     {
         User AddUser (string email, string password);
 
-        bool ContainsUser (string email);
+        bool ContainsUser (string userEmail);
 
         List<City> GetAllCities ();
 
         City GetCity (string name);
 
-        List<WeatherRecord> GetRecords (User user, City city, DateTime time);
+        List<WeatherRecord> GetRecords (string userEmail, string cityName, DateTime time);
 
-        User GetUser (string email, string password);
+        User GetUser (string userEmail, string password);
 
         void SaveRecord (WeatherRecord record);
 
-        void StartDiary (string email, City city);
+        void StartDiary (string userEmail, string cityName);
 
-        void StopDiary (string email, City city);
+        void StopDiary (string userEmail, string cityName);
     }
 }
