@@ -10,14 +10,13 @@ namespace Server
     public class SubscribeViewModel
     {
         public SubscribeViewModel() { }
-        public SubscribeViewModel(string successMessage, IWeatherDiaryRepository repository)
+        public SubscribeViewModel(string userEmail, string successMessage, IWeatherDiaryRepository repository)
         {
-            Cities = repository.GetAllCities().OrderBy(c => c);
+            Cities = repository.GetAllCities().OrderBy(c => c).Except(repository.GetCitiesForUser(userEmail));
             SuccessMessage = successMessage;
         }
 
         public IEnumerable<string> Cities { get; set; }
         public string SuccessMessage { get; set; }
-        public string SelectedCity { get; set; }
     }
 }

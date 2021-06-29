@@ -1,7 +1,9 @@
 ﻿using Common;
 using Database;
 using Microsoft.AspNetCore.Mvc;
+using Server.Infrastructure;
 using Server.Models;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Server.Controllers
@@ -18,32 +20,32 @@ namespace Server.Controllers
         [HttpGet]
         public IActionResult Subscribe()
         {
-            var model = new SubscribeViewModel(null, repository);
+            string email = HttpContext.User.Identity.Name;
+            var model = new SubscribeViewModel(email, null, repository);
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Subscribe(SubscribeViewModel model)
+        public IActionResult Subscribe([FromForm] SelectCity city)
         {
             string email = HttpContext.User.Identity.Name;
-            model.Cities = repository.GetAllCities().OrderBy(c => c);
-            model.SuccessMessage = "Дневник успешно добавлен";
-            //var model = new SubscribeViewModel("Дневник успешно добавлен", repository);
-            repository.StartDiary(email, model.SelectedCity);
+            if (city.Name != "Выберите город")
+                repository.StartDiary(email, city.Name);
+            var model = new SubscribeViewModel(email, "Дневник успешно добавлен", repository);
             return View(model);
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Select()
         {
-            var model = new GetDiaryViewModel();
+            var model = new SelectDiaryViewModel();
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Get(string currentCity, Common.TimesOfDay timeOfDay)
+        public IActionResult Select([FromForm] SelectDiaryOptions options)
         {
-            var model = new GetDiaryViewModel();
+            var model = new SelectDiaryViewModel();
             return View(model);
         }
 
@@ -56,10 +58,11 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        public IActionResult Unsubscribe(string currentCity)
+        public IActionResult Unsubscribe([FromForm] SelectCity city)
         {
             string email = HttpContext.User.Identity.Name;
-            repository.StopDiary(email, currentCity);
+            if (city.Name != "Выберите город")
+                repository.StopDiary(email, city.Name);
             var model = new UnsubscribeViewModel(email, "Дневник успешно остановлен", repository);
             return View(model);
         }
