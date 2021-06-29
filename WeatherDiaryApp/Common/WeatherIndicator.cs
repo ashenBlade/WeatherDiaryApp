@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Server.Models
+﻿namespace Common
 {
     public class WeatherIndicator
     {
