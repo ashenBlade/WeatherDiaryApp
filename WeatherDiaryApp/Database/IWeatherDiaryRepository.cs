@@ -9,6 +9,8 @@ namespace Database
 
         bool ContainsUser (string email);
 
+        List<City> GetAllCities ();
+
         City GetCity (string name);
 
         List<WeatherRecord> GetRecords (User user, City city, DateTime time);
