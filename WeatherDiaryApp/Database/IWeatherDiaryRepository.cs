@@ -11,11 +11,11 @@ namespace Database
 
         List<string> GetAllCities ();
 
-        List<string> GetCitiesForUser (string userEmail);
-
         City GetCity (string name);
 
         List<WeatherRecord> GetRecords (string userEmail, string cityName, DateTime time);
+
+        List<string> GetSubscribedCitiesForUser (string userEmail);
 
         User GetUser (string userEmail, string password);
 

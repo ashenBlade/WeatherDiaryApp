@@ -48,18 +48,6 @@ namespace Database
                 .ToList();
         }
 
-        public List<string> GetCitiesForUser (string userEmail)
-        {
-            using var context = new WeatherDiaryContext(ContextOptions);
-            var user = context.Users
-                .Include(u => u.UserCities)
-                    .ThenInclude(uc => uc.City)
-                    .FirstOrDefault(u => u.Email == userEmail);
-            return user.UserCities
-                .Select(uc => uc.City.Name)
-                .ToList();
-        }
-
         public City GetCity (string name)
         {
             using var context = new WeatherDiaryContext(ContextOptions);
@@ -89,6 +77,19 @@ namespace Database
                 .Where(wr =>
                     wr.Date >= userCity.DateStart &&
                     (!userCity.DateEnd.HasValue || wr.Date <= userCity.DateEnd))
+                .ToList();
+        }
+
+        public List<string> GetSubscribedCitiesForUser (string userEmail)
+        {
+            using var context = new WeatherDiaryContext(ContextOptions);
+            var user = context.Users
+                .Include(u => u.UserCities)
+                    .ThenInclude(uc => uc.City)
+                .FirstOrDefault(u => u.Email == userEmail);
+            return user.UserCities
+                .Where(uc => !uc.DateEnd.HasValue)
+                .Select(uc => uc.City.Name)
                 .ToList();
         }
 
