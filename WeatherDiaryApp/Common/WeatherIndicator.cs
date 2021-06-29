@@ -1,11 +1,8 @@
-﻿using System;
-
-namespace Server.Models
+﻿namespace Common
 {
     public class WeatherIndicator
     {
         public Cloudy Cloudy { get; set; }
-        public int Id { get; set; }
         public Phenomena Phenomena { get; set; }
         public Precipitation Precipitation { get; set; }
         public int Pressure { get; set; }
