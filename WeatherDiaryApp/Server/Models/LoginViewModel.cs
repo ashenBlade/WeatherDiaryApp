@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Server.Models
 {
-    public class LoginModel
+    public class LoginViewModel
     {
         [Required]
         public string Email { get; set; }
