@@ -9,10 +9,9 @@ namespace Server
     //класс для view главной страницы
     public class UnsubscribeViewModel
     {
-        public UnsubscribeViewModel() { }
         public UnsubscribeViewModel(string userEmail, string successMessage, IWeatherDiaryRepository repository)
         {
-            Cities = repository.GetCitiesForUser(userEmail).OrderBy(c => c);
+            Cities = repository.GetSubscribedCitiesForUser(userEmail).OrderBy(c => c);
             SuccessMessage = successMessage;
         }
 
