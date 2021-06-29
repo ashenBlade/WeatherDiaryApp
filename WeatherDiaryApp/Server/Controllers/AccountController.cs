@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Server.Models;
 using User = Common.User;
 
@@ -70,7 +71,19 @@ namespace Server.Controllers
                 return View(model);
             }
 
-            // TODO
+            var userAlreadyRegistered = _repository.ContainsUser(model.Email);
+            if (userAlreadyRegistered)
+            {
+                ModelState.AddModelError("", "Пользователь с такой почтой уже зарегистрирован");
+                return View(model);
+            }
+
+            var user = _repository.AddUser(model.Email, model.Password);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Извините. Что-то пошло не так");
+                return View(model);
+            }
 
             return RedirectToAction("Login");
         }

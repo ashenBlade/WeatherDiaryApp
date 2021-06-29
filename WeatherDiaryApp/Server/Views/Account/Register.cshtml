@@ -9,14 +9,17 @@
     <h1 class="display-4">Регистрация</h1>
     <br /><br />
     <form method="post" action="~/Account/Register">
-        <input type="email" name="email" placeholder="email" />
-        <br /><br />
-        <input type="password" name="password" placeholder="пароль" />
-        <br /><br />
-        <input type="password" name="repeat_password" placeholder="повторите пароль" />
-        <br /><br />
+        @Html.DisplayNameFor(model => model.Email)<br />
+        @Html.EditorFor(model => model.Email, new {@placeholder = "Email"})
+        <br/><br/>
+        @Html.DisplayNameFor(model => model.Password) <br />
+        @Html.EditorFor(model => model.Password)
+        <br/><br/>
+        @Html.DisplayNameFor(model => model.ConfirmPassword)<br />
+        @Html.EditorFor(model => model.ConfirmPassword)
+        <br/><br/>
         <a href="~/Account/Login">Уже есть аккаунт?</a>
-        <br /><br />
-        <input type="submit" value="Зарегистрироваться" />
+        <br/><br/>
+        <input type="submit" value="Зарегистрироваться"/>
     </form>
 </div>
