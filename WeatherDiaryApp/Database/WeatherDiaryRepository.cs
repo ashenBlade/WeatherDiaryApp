@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Database.SeedData;
 
 namespace Database
 {
@@ -14,6 +15,13 @@ namespace Database
             ContextOptions = new DbContextOptionsBuilder<WeatherDiaryContext>()
                 .UseSqlite(connectionString)
                 .Options;
+
+            using var context = new WeatherDiaryContext(ContextOptions);
+            if (!context.Cities.Any())
+            {
+                var initializer = new Initializer();
+                initializer.Seed(context);
+            }
         }
 
         public User AddUser (string email, string password)
@@ -82,10 +90,10 @@ namespace Database
             context.SaveChanges();
         }
 
-        public void StartDiary (User user, City city)
+        public void StartDiary (string email, City city)
         {
             using var context = new WeatherDiaryContext(ContextOptions);
-            user = context.Users.Find(user.Id);
+            var user = context.Users.FirstOrDefault(u => u.Email == email);
             city = context.Cities.Find(city.Id);
             context.UserCities.Add(new UserCity
             {
@@ -96,9 +104,10 @@ namespace Database
             context.SaveChanges();
         }
 
-        public void StopDiary (User user, City city)
+        public void StopDiary (string email, City city)
         {
             using var context = new WeatherDiaryContext(ContextOptions);
+            var user = context.Users.FirstOrDefault(u => u.Email == email);
             var userCity = context.UserCities.FirstOrDefault(uc =>
                 uc.UserId == user.Id &&
                 uc.CityId == city.Id &&
