@@ -24,7 +24,9 @@ namespace Server.Controllers
         [HttpPost]
         public IActionResult Subscribe(string currentCity)
         {
-            var model = new SubscribeViewModel();
+
+            var model = new SubscribeViewModel(successMessage: "Дневник успешно добавлен");
+
             return View(model);
         }
 
@@ -52,7 +54,8 @@ namespace Server.Controllers
         [HttpPost]
         public IActionResult Unsubscribe(string currentCity)
         {
-            var model = new UnsubscribeViewModel();
+            var model = new UnsubscribeViewModel(successMessage: "Дневник успешно остановлен");
+
             return View(model);
         }
     }

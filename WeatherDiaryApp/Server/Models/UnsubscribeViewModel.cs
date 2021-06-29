@@ -8,11 +8,13 @@ namespace Server
     //класс для view главной страницы
     public class UnsubscribeViewModel
     {
-        public UnsubscribeViewModel()
+        public UnsubscribeViewModel(string successMessage = null)
         {
             Citys = new[] { "Казань", "Екатеринбург", "Москва" };
+            SuccessMessage = successMessage;
         }
 
         public IEnumerable<string> Citys { get; set; }
+        public string SuccessMessage { get; set; }
     }
 }
