@@ -61,9 +61,11 @@ namespace Database
                 .FirstOrDefault(c => c.Name == name);
         }
 
-        public List<WeatherRecord> GetRecords (User user, City city, DateTime date)
+        public List<WeatherRecord> GetRecords (string userEmail, string cityName, DateTime date)
         {
             using var context = new WeatherDiaryContext(ContextOptions);
+            var user = context.Users.FirstOrDefault(u => u.Email == userEmail);
+            var city = context.Cities.FirstOrDefault(c => c.Name == cityName);
             var userCity = context.UserCities
                 .Include(uc => uc.City)
                     .ThenInclude(c => c.WeatherRecords)
@@ -100,11 +102,11 @@ namespace Database
             context.SaveChanges();
         }
 
-        public void StartDiary (string email, City city)
+        public void StartDiary (string userEmail, string cityName)
         {
             using var context = new WeatherDiaryContext(ContextOptions);
-            var user = context.Users.FirstOrDefault(u => u.Email == email);
-            city = context.Cities.Find(city.Id);
+            var user = context.Users.FirstOrDefault(u => u.Email == userEmail);
+            var city = context.Cities.FirstOrDefault(c => c.Name == cityName);
             context.UserCities.Add(new UserCity
             {
                 User = user,
@@ -114,10 +116,11 @@ namespace Database
             context.SaveChanges();
         }
 
-        public void StopDiary (string email, City city)
+        public void StopDiary (string userEmail, string cityName)
         {
             using var context = new WeatherDiaryContext(ContextOptions);
-            var user = context.Users.FirstOrDefault(u => u.Email == email);
+            var user = context.Users.FirstOrDefault(u => u.Email == userEmail);
+            var city = context.Cities.FirstOrDefault(c => c.Name == cityName);
             var userCity = context.UserCities.FirstOrDefault(uc =>
                 uc.UserId == user.Id &&
                 uc.CityId == city.Id &&
