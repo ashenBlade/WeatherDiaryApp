@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Models
 {
-    public class RegisterModel
+    public class RegisterViewModel
     {
         [Required]
         [Display(Name = "Почта")]
