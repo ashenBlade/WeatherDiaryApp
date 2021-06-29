@@ -20,7 +20,7 @@
         @Html.DisplayNameFor(model => model.ConfirmPassword)<br />
         @Html.EditorFor(model => model.ConfirmPassword)
         <br/><br/>
-        <div class="text-danger" asp-validation-summary="All"> </div>
+        <div class="text-danger text-center" asp-validation-summary="ModelOnly"> </div>
         <a href="~/Account/Login">Уже есть аккаунт?</a>
         <br/><br/>
         <input type="submit" value="Зарегистрироваться"/> <br/>
