@@ -29,23 +29,29 @@ namespace Server.Controllers
         public IActionResult Subscribe([FromForm] SelectCity city)
         {
             string email = HttpContext.User.Identity.Name;
-            if (city.Name != "Выберите город")
+            string message = "Выберите город";
+            if (isCityNameCorrect(city))
+            {
                 repository.StartDiary(email, city.Name);
-            var model = new SubscribeViewModel(email, "Дневник успешно добавлен", repository);
+                message = "Дневник успешно добавлен";
+            }
+            var model = new SubscribeViewModel(email, message, repository);
             return View(model);
         }
 
         [HttpGet]
         public IActionResult Select()
         {
-            var model = new SelectDiaryViewModel();
+            string email = HttpContext.User.Identity.Name;
+            var model = new SelectDiaryViewModel(email, repository);
             return View(model);
         }
 
         [HttpPost]
         public IActionResult Select([FromForm] SelectDiaryOptions options)
         {
-            var model = new SelectDiaryViewModel();
+            string email = HttpContext.User.Identity.Name;
+            var model = new SelectDiaryViewModel(email, repository);
             return View(model);
         }
 
@@ -61,10 +67,19 @@ namespace Server.Controllers
         public IActionResult Unsubscribe([FromForm] SelectCity city)
         {
             string email = HttpContext.User.Identity.Name;
-            if (city.Name != "Выберите город")
+            string message = "Вы отписались от всех дневников";
+            if (isCityNameCorrect(city))
+            {
                 repository.StopDiary(email, city.Name);
-            var model = new UnsubscribeViewModel(email, "Дневник успешно остановлен", repository);
+                message = "Дневник успешно остановлен";
+            }
+            var model = new UnsubscribeViewModel(email, message, repository);
             return View(model);
+        }
+
+        private bool isCityNameCorrect(SelectCity city)
+        {
+            return city != null && city.Name != null;
         }
     }
 }
