@@ -9,13 +9,15 @@ namespace Database
 
         bool ContainsUser (string userEmail);
 
-        List<string> GetAllCities ();
+        List<City> GetAllCities ();
+
+        List<string> GetAllCityNames ();
 
         City GetCity (string name);
 
         List<WeatherRecord> GetRecords (string userEmail, string cityName, DateTime time);
 
-        List<string> GetSubscribedCitiesForUser (string userEmail);
+        List<string> GetSubscribedCityNamesForUser (string userEmail);
 
         User GetUser (string userEmail, string password);
 
