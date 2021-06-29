@@ -1,7 +1,7 @@
-﻿@model LoginModel
+﻿@model LoginViewModel
 
 @{
-    ViewBag.Title = "Login";
+    ViewData["Title"] = "Login";
     Layout = "_Layout";
 }
 
@@ -9,10 +9,13 @@
     <h1 class="display-4">Вход</h1>
     <br /><br />
     <form method="post" action="~/Account/Login">
-        <input type="email" name="email" placeholder="email" />
+        @Html.DisplayNameFor(model => model.Email)
+        @Html.EditorFor(model => model.Email)
         <br /><br />
-        <input type="password" name="password" placeholder="пароль" />
+        @Html.DisplayNameFor(model => model.Password)
+        @Html.EditorFor(model => model.Password)
         <br /><br />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div> <br/>
         <a href="~/Account/Register">Ещё не зарегистрировались?</a>
         <br /><br />
         <input type="submit" value="Войти" />

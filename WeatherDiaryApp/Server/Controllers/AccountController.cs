@@ -28,25 +28,28 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginModel model)
+        public async Task<IActionResult> Login(LoginViewModel viewModel)
         {
+            const string errorMessage = "Неправильные почта и (или) пароль";
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Неправильные почта и (или) пароль");
-                return View(model);
+                ModelState.AddModelError("", errorMessage);
+                return View(viewModel);
             }
 
-            if (!_repository.ContainsUser(model.Email))
+            var userRegistered = _repository.ContainsUser(viewModel.Email);
+
+            if (!userRegistered)
             {
-                ModelState.AddModelError("", "Пользователя с такой почтой не существует");
-                return View(model);
+                ModelState.AddModelError("", errorMessage);
+                return View(viewModel);
             }
 
-            var dbUser = _repository.GetUser(model.Email, model.Password);
+            var dbUser = _repository.GetUser(viewModel.Email, viewModel.Password);
             if (dbUser is null)
             {
-                ModelState.AddModelError("", "Неправильные почта и (или) пароль");
-                return View(model);
+                ModelState.AddModelError("", errorMessage);
+                return View(viewModel);
             }
 
             var user = new User() { Email = dbUser.Email, Password = dbUser.Password };
@@ -63,26 +66,26 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(RegisterModel model)
+        public IActionResult Register(RegisterViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Неправильные почта и (или) пароль");
-                return View(model);
+                return View(viewModel);
             }
 
-            var userAlreadyRegistered = _repository.ContainsUser(model.Email);
+            var userAlreadyRegistered = _repository.ContainsUser(viewModel.Email);
             if (userAlreadyRegistered)
             {
                 ModelState.AddModelError("", "Пользователь с такой почтой уже зарегистрирован");
-                return View(model);
+                return View(viewModel);
             }
 
-            var user = _repository.AddUser(model.Email, model.Password);
+            var user = _repository.AddUser(viewModel.Email, viewModel.Password);
             if (user == null)
             {
                 ModelState.AddModelError("", "Извините. Что-то пошло не так");
-                return View(model);
+                return View(viewModel);
             }
 
             return RedirectToAction("Login");
