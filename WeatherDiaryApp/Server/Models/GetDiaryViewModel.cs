@@ -10,11 +10,11 @@ namespace Server
     {
         public GetDiaryViewModel()
         {
-            Citys = new[] { "Казань", "Екатеринбург", "Москва" };
+            Cities = new[] { "Казань", "Екатеринбург", "Москва" };
             WeatherСonditions = new[] { "температура", "явления", "облачность", "ветер", "давление", "влажность" };
         }
 
-        public IEnumerable<string> Citys { get; set; }
+        public IEnumerable<string> Cities { get; set; }
         public IEnumerable<string> WeatherСonditions { get; set; }
     }
 }

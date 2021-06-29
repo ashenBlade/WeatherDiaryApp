@@ -14,9 +14,10 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        public string Subscribe(string currentCity)
+        public IActionResult Subscribe(string currentCity)
         {
-            return "Subscribe";
+            var model = new CreateVM();
+            return View(model);
         }
 
         [HttpGet]
@@ -27,9 +28,10 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        public string Get(string currentCity, TimesOfDay timeOfDay)
+        public IActionResult Get(string currentCity, TimesOfDay timeOfDay)
         {
-            return "Get";
+            var model = new HomeVM();
+            return View(model);
         }
 
         [HttpGet]
@@ -40,9 +42,10 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        public string Unsubscribe(string currentCity)
+        public IActionResult Unsubscribe(string currentCity)
         {
-            return "Unsubscribe";
+            var model = new StopVM();
+            return View(model);
         }
     }
 }
