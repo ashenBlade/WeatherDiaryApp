@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Database.SeedData;
 
 namespace Database
 {
@@ -14,6 +15,13 @@ namespace Database
             ContextOptions = new DbContextOptionsBuilder<WeatherDiaryContext>()
                 .UseSqlite(connectionString)
                 .Options;
+
+            using var context = new WeatherDiaryContext(ContextOptions);
+            if (!context.Cities.Any())
+            {
+                var initializer = new Initializer();
+                initializer.Seed(context);
+            }
         }
 
         public User AddUser (string email, string password)
