@@ -1,4 +1,4 @@
-﻿namespace Server.Models
+﻿namespace Common
 {
     public class User
     {
