@@ -40,6 +40,16 @@ namespace Database
                 .Any(x => x.Email == email);
         }
 
+        public List<City> GetAllCities ()
+        {
+            using var context = new WeatherDiaryContext(ContextOptions);
+            return context.Cities
+                .Include(c => c.UserCities)
+                .Include(c => c.WeatherRecords)
+                    .ThenInclude(wr => wr.WeatherIndicator)
+                .ToList();
+        }
+
         public City GetCity (string name)
         {
             using var context = new WeatherDiaryContext(ContextOptions);
