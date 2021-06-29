@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 namespace Server
 {
     //класс для view главной страницы
-    public class CreateVM
+    public class SubscribeViewModel
     {
-        public CreateVM()
+        public SubscribeViewModel()
         {
             Citys = new[] { "Москва", "Санкт-Петербург", "Казань", "Екатеринбург" };
         }

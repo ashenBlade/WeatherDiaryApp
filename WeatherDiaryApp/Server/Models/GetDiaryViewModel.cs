@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 namespace Server
 {
     //класс для view главной страницы
-    public class HomeVM
+    public class GetDiaryViewModel
     {
-        public HomeVM()
+        public GetDiaryViewModel()
         {
             Citys = new[] { "Казань", "Екатеринбург", "Москва" };
             WeatherСonditions = new[] { "температура", "явления", "облачность", "ветер", "давление", "влажность" };
