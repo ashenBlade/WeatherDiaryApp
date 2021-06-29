@@ -1,6 +1,7 @@
 ﻿using Common;
 using Database;
 using Microsoft.AspNetCore.Mvc;
+using Server.Infrastructure;
 using Server.Models;
 
 namespace Server.Controllers
@@ -31,16 +32,16 @@ namespace Server.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Select()
         {
-            var model = new GetDiaryViewModel();
+            var model = new SelectDiaryViewModel();
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Get(string currentCity, Common.TimesOfDay timeOfDay)
+        public IActionResult Select([FromForm] SelectDiaryOptions options)
         {
-            var model = new GetDiaryViewModel();
+            var model = new SelectDiaryViewModel();
             return View(model);
         }
 
