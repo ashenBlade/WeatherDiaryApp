@@ -1,7 +1,9 @@
-﻿@model LoginModel
+﻿@model LoginViewModel
 
 @{
-    ViewBag.Title = "Login";
+    const string title = "Вход в аккаунт";
+    ViewBag.Title = title;
+    ViewData["Title"] = title;
     Layout = "_Layout";
 }
 

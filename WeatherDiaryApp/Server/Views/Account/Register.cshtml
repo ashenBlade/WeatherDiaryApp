@@ -1,7 +1,9 @@
-﻿@model RegisterModel
+﻿@model RegisterViewModel
 
 @{
-    ViewBag.Title = "Register";
+    const string title = "Регистрация";
+    ViewBag.Title = title;
+    ViewData["Title"] = title;
     Layout = "_Layout";
 }
 
