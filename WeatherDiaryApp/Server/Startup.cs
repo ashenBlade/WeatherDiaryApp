@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Database;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +27,14 @@ namespace Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddCookie(options =>
+                               {
+                                   options.LoginPath = new PathString("/Account/Login");
+                                   options.LogoutPath = new PathString("/Account/Logout");
+                               }
+                              );
+            ConfigureRepository(services, Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,6 +56,7 @@ namespace Server
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -53,6 +65,13 @@ namespace Server
                                              name: "default",
                                              pattern: "{controller=Diary}/{action=Get}/{id?}");
             });
+        }
+
+        private static IServiceCollection ConfigureRepository(IServiceCollection services, IConfiguration configuration)
+        {
+            var connection = configuration.GetConnectionString("debug");
+            services.AddTransient<IWeatherDiaryRepository>(s => new WeatherDiaryRepository(connection));
+            return services;
         }
     }
 }

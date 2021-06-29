@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Common;
+using Microsoft.AspNetCore.Mvc;
 using Server.Models;
 
 namespace Server.Controllers
@@ -8,7 +9,7 @@ namespace Server.Controllers
         [HttpGet]
         public IActionResult Subscribe()
         {
-            var model = new CreateVM();
+            var model = new SubscribeViewModel();
             return View(model);
         }
 
@@ -22,7 +23,7 @@ namespace Server.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var model = new HomeVM();
+            var model = new GetDiaryViewModel();
             return View(model);
         }
 
@@ -36,7 +37,7 @@ namespace Server.Controllers
         [HttpGet]
         public IActionResult Unsubscribe()
         {
-            var model = new StopVM();
+            var model = new UnsubscribeViewModel();
             return View(model);
         }
 
