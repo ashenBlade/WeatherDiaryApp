@@ -1,4 +1,5 @@
 ﻿using Common;
+using Database;
 using Microsoft.AspNetCore.Mvc;
 using Server.Models;
 
@@ -6,6 +7,13 @@ namespace Server.Controllers
 {
     public class DiaryController : Controller
     {
+        public DiaryController(IWeatherDiaryRepository repository)
+        {
+            this.repository = repository;
+        }
+
+        private IWeatherDiaryRepository repository;
+
         [HttpGet]
         public IActionResult Subscribe()
         {
@@ -16,7 +24,9 @@ namespace Server.Controllers
         [HttpPost]
         public IActionResult Subscribe(string currentCity)
         {
+
             var model = new SubscribeViewModel(successMessage: "Дневник успешно добавлен");
+
             return View(model);
         }
 
@@ -28,9 +38,10 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        public string Get(string currentCity, TimesOfDay timeOfDay)
+        public IActionResult Get(string currentCity, Common.TimesOfDay timeOfDay)
         {
-            return "Get";
+            var model = new GetDiaryViewModel();
+            return View(model);
         }
 
         [HttpGet]
@@ -44,6 +55,7 @@ namespace Server.Controllers
         public IActionResult Unsubscribe(string currentCity)
         {
             var model = new UnsubscribeViewModel(successMessage: "Дневник успешно остановлен");
+
             return View(model);
         }
     }
