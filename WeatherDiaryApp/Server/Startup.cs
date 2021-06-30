@@ -1,16 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using Api;
+using Api.WeatherApi;
 using Database;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Server.Services;
+using TimesOfDay = Common.TimesOfDay;
 
 namespace Server
 {
@@ -35,6 +41,9 @@ namespace Server
                                }
                               );
             ConfigureRepository(services, Configuration);
+            services.AddScoped<IWeatherApiRequester, WeatherApiApiRequester>();
+
+            services.AddHostedService<WeatherUpdaterHostedService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,7 +79,9 @@ namespace Server
         private static IServiceCollection ConfigureRepository(IServiceCollection services, IConfiguration configuration)
         {
             var connection = configuration.GetConnectionString("debug");
-            services.AddTransient<IWeatherDiaryRepository>(s => new WeatherDiaryRepository(connection));
+            services.AddScoped<IWeatherDiaryRepository>(s => new WeatherDiaryRepository(connection));
+            services.AddDbContext<WeatherDiaryContext>(builder =>
+                                                           builder.UseSqlite(connection));
             return services;
         }
     }

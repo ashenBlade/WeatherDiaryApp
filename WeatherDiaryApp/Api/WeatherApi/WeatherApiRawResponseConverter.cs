@@ -9,6 +9,7 @@ namespace Api.WeatherApi
         static Dictionary<int, Tuple<Phenomena, Precipitation>> CodeToPhenomenaAndPrecipitationsDictionary;
         static WeatherApiRawResponseConverter()
         {
+            CodeToPhenomenaAndPrecipitationsDictionary = new Dictionary<int, Tuple<Phenomena, Precipitation>>();
             CodeToPhenomenaAndPrecipitationsDictionary.Add(1000, Tuple.Create(Phenomena.None, Precipitation.None));
             CodeToPhenomenaAndPrecipitationsDictionary.Add(1003, Tuple.Create(Phenomena.None, Precipitation.None));
             CodeToPhenomenaAndPrecipitationsDictionary.Add(1006, Tuple.Create(Phenomena.None, Precipitation.None));
@@ -46,7 +47,6 @@ namespace Api.WeatherApi
             CodeToPhenomenaAndPrecipitationsDictionary.Add(1240, Tuple.Create(Phenomena.None, Precipitation.Rain));
             CodeToPhenomenaAndPrecipitationsDictionary.Add(1243, Tuple.Create(Phenomena.None, Precipitation.Rain));
             CodeToPhenomenaAndPrecipitationsDictionary.Add(1246, Tuple.Create(Phenomena.Thunderstorm, Precipitation.Rain));
-            CodeToPhenomenaAndPrecipitationsDictionary.Add(1243, Tuple.Create(Phenomena.None, Precipitation.Snow));
             CodeToPhenomenaAndPrecipitationsDictionary.Add(1252, Tuple.Create(Phenomena.None, Precipitation.Snow));
             CodeToPhenomenaAndPrecipitationsDictionary.Add(1255, Tuple.Create(Phenomena.None, Precipitation.Snow));
             CodeToPhenomenaAndPrecipitationsDictionary.Add(1258, Tuple.Create(Phenomena.None, Precipitation.SnowGroats));
@@ -54,7 +54,6 @@ namespace Api.WeatherApi
             CodeToPhenomenaAndPrecipitationsDictionary.Add(1264, Tuple.Create(Phenomena.Ice, Precipitation.SnowGroats));
             CodeToPhenomenaAndPrecipitationsDictionary.Add(1273, Tuple.Create(Phenomena.Thunderstorm, Precipitation.Rain));
             CodeToPhenomenaAndPrecipitationsDictionary.Add(1276, Tuple.Create(Phenomena.Thunderstorm, Precipitation.Rain));
-            CodeToPhenomenaAndPrecipitationsDictionary.Add(1279, Tuple.Create(Phenomena.Thunderstorm, Precipitation.Snow));
             CodeToPhenomenaAndPrecipitationsDictionary.Add(1279, Tuple.Create(Phenomena.Thunderstorm, Precipitation.Snow));
         }
 
@@ -90,7 +89,7 @@ namespace Api.WeatherApi
                 if (response.Current.WindDirection.Contains('E')) return WindDirection.NE;
                 else return WindDirection.N;
             }
-            if (response.Current.WindDirection.Contains('S')) 
+            if (response.Current.WindDirection.Contains('S'))
             {
                 if (response.Current.WindDirection.Contains('W')) return WindDirection.SW;
                 if (response.Current.WindDirection.Contains('E')) return WindDirection.SE;

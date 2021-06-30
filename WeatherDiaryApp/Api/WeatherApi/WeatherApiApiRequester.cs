@@ -27,9 +27,17 @@ namespace Api.WeatherApi
         public WeatherIndicator GetRecord(string city)
         {
             var url = GetRequestUrl(city);
-            var responseJson = _client.GetStringAsync(url)
-                                         .GetAwaiter()
-                                         .GetResult();
+            string responseJson;
+            try
+            {
+                responseJson = _client.GetStringAsync(url)
+                                          .GetAwaiter()
+                                          .GetResult();
+            }
+            catch (Exception e)
+            {
+                return new WeatherIndicator();
+            }
             var responseRaw = JsonSerializer.Deserialize<WeatherApiApiResponseRaw>(responseJson);
             var record = WeatherApiRawResponseConverter.Convert(responseRaw);
             return record;
