@@ -97,29 +97,25 @@ namespace Database
             var user = context.Users.FirstOrDefault(u => u.Email == userEmail);
             var city = context.Cities.FirstOrDefault(c => c.Name == cityName);
 
-            var userCities = context.UserCities
-                .Where(uc => uc.UserId == user.Id && uc.CityId == city.Id);
-            foreach (var uc in userCities)
+            var userCity = context.UserCities
+                .FirstOrDefault(uc => uc.UserId == user.Id && uc.CityId == city.Id);
+            context.Entry(userCity)
+                .Reference(uc => uc.City)
+                .Load();
+            context.Entry(userCity.City)
+                .Collection(c => c.WeatherRecords)
+                .Load();
+            foreach (var wr in userCity.City.WeatherRecords)
             {
-                context.Entry(uc)
-                    .Reference(uc => uc.City)
+                context.Entry(wr)
+                    .Reference(wr => wr.WeatherIndicator)
                     .Load();
-                context.Entry(uc.City)
-                    .Collection(c => c.WeatherRecords)
+                context.Entry(wr)
+                    .Reference(wr => wr.City)
                     .Load();
-                foreach (var wr in uc.City.WeatherRecords)
-                {
-                    context.Entry(wr)
-                        .Reference(wr => wr.WeatherIndicator)
-                        .Load();
-                    context.Entry(wr)
-                        .Reference(wr => wr.City)
-                        .Load();
-                }
             }
-            return userCities
-                .SelectMany(uc => uc.City.WeatherRecords
-                    .Where(wr => wr.Date >= uc.DateStart && (!uc.DateEnd.HasValue || wr.Date <= uc.DateEnd)))
+            return userCity.City.WeatherRecords
+                .Where(wr => wr.Date >= userCity.DateStart && (!userCity.DateEnd.HasValue || wr.Date <= userCity.DateEnd))
                 .Select(ConvertToCommon)
                 .ToList();
         }
