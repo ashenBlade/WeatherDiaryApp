@@ -42,7 +42,6 @@ namespace Server
                               );
             ConfigureRepository(services, Configuration);
             services.AddScoped<IWeatherApiRequester, WeatherApiApiRequester>();
-
             services.AddHostedService<WeatherUpdaterHostedService>();
         }
 

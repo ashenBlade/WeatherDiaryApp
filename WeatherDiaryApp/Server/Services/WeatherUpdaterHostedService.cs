@@ -66,6 +66,7 @@ namespace Server.Services
             {
                 using var scope = _factory.CreateScope();
                 var context = scope.ServiceProvider.GetRequiredService<WeatherDiaryContext>();
+                var repo = scope.ServiceProvider.GetRequiredService<IWeatherDiaryRepository>();
                 var api = scope.ServiceProvider.GetRequiredService<IWeatherApiRequester>();
                 var cities = context.Cities.ToList();
                 foreach (var city in cities)
@@ -79,10 +80,18 @@ namespace Server.Services
                                   TimeOfDay = Database.TimesOfDay.Day,
                                   WeatherIndicator = new Database.WeatherIndicator()
                                                      {
-                                                         Cloudy = Cloudy.Cloudless, Pressure = 100000,
+                                                         Cloudy = ( Cloudy ) resp.Cloudy,
+                                                         Pressure = resp.Pressure,
                                                      }
                               };
                     context.WeatherRecords.Add(rec);
+                    repo.SaveRecord(new Common.WeatherRecord()
+                                    {
+                                        City = new City(city.Name, TimeSpan.FromHours(city.TimeZone)),
+                                        Date = DateTime.Now,
+                                        TimeOfDay = TimesOfDay.Evening,
+                                        WeatherIndicator = resp
+                                    });
                 }
 
                 context.SaveChanges();
