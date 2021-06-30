@@ -10,6 +10,7 @@ namespace Server.Infrastructure
         public bool Pressure { get; set; }
         public bool Wind { get; set; }
         public bool Precipitations { get; set; }
+        public bool Phenomena { get; set; }
         public bool Cloudy { get; set; }
     }
 }
