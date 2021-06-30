@@ -98,7 +98,7 @@ namespace Database
             var city = context.Cities.FirstOrDefault(c => c.Name == cityName);
 
             var userCity = context.UserCities
-                .FirstOrDefault(uc => uc.UserId == user.Id && uc.CityId == city.Id);
+                .FirstOrDefault(uc => uc.UserId == user.Id && uc.CityId == city.Id && !uc.DateEnd.HasValue);
             context.Entry(userCity)
                 .Reference(uc => uc.City)
                 .Load();
@@ -115,7 +115,7 @@ namespace Database
                     .Load();
             }
             return userCity.City.WeatherRecords
-                .Where(wr => wr.Date >= userCity.DateStart && (!userCity.DateEnd.HasValue || wr.Date <= userCity.DateEnd))
+                .Where(wr => wr.Date >= userCity.DateStart)
                 .Select(ConvertToCommon)
                 .ToList();
         }
