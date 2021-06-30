@@ -20,6 +20,7 @@ namespace Server.Controllers
         }
 
         private IWeatherDiaryRepository repository;
+        private SelectDiaryOptions selectedOptions;
 
         [HttpGet]
         public IActionResult Subscribe()
@@ -54,9 +55,14 @@ namespace Server.Controllers
         [HttpPost]
         public IActionResult Select([FromForm] SelectDiaryOptions options)
         {
-            //string email = HttpContext.User.Identity.Name;
-            //var model = new SelectDiaryViewModel(email, repository);
-            return RedirectToAction("Show");
+            if (options.CityName != null)
+            {
+                selectedOptions = options;
+                return RedirectToAction("Show");
+            }
+            string email = HttpContext.User.Identity.Name;
+            var model = new SelectDiaryViewModel(email, repository);
+            return View(model);
         }
 
         [HttpGet]
@@ -85,7 +91,7 @@ namespace Server.Controllers
         public IActionResult Show()
         {
             string email = HttpContext.User.Identity.Name;
-            var model = new ShowDiaryViewModel();
+            var model = new ShowDiaryViewModel(email, repository, selectedOptions);
             return View(model);
         }
 
@@ -93,7 +99,7 @@ namespace Server.Controllers
         public IActionResult Show(string kek)
         {
             string email = HttpContext.User.Identity.Name;
-            var model = new ShowDiaryViewModel();
+            var model = new ShowDiaryViewModel(email, repository, selectedOptions);
             return View(model);
         }
 
