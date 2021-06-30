@@ -1,0 +1,26 @@
+﻿@model RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+    Layout = "_Layout";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Регистрация</h1>
+    <br /><br />
+    <form method="post" action="~/Account/Register">
+        @Html.DisplayNameFor(model => model.Email)<br />
+        @Html.EditorFor(model => model.Email, new {@placeholder = "Email"})
+        <br/><br/>
+        @Html.DisplayNameFor(model => model.Password) <br />
+        @Html.EditorFor(model => model.Password)
+        <br/><br/>
+        @Html.DisplayNameFor(model => model.ConfirmPassword)<br />
+        @Html.EditorFor(model => model.ConfirmPassword)
+        <br/><br/>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div> <br/>
+        <a href="~/Account/Login">Уже есть аккаунт?</a>
+        <br/><br/>
+        <input type="submit" value="Зарегистрироваться"/>
+    </form>
+</div>
