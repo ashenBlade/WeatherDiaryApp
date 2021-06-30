@@ -9,9 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Server.Controllers
 {
-#if !DEBUG
     [Authorize]
-#endif
     public class DiaryController : Controller
     {
         public DiaryController(IWeatherDiaryRepository repository)
@@ -54,8 +52,8 @@ namespace Server.Controllers
         [HttpPost]
         public IActionResult Select([FromForm] SelectDiaryOptions options)
         {
-            //string email = HttpContext.User.Identity.Name;
-            //var model = new SelectDiaryViewModel(email, repository);
+            string email = HttpContext.User.Identity.Name;
+            var model = new SelectDiaryViewModel(email, repository);
             return RedirectToAction("Show");
         }
 
@@ -82,7 +80,7 @@ namespace Server.Controllers
         }
 
         [HttpGet]
-        public IActionResult Show()
+        public IActionResult Show(SelectDiaryOptions options)
         {
             string email = HttpContext.User.Identity.Name;
             var model = new ShowDiaryViewModel();
