@@ -1,9 +1,171 @@
 ﻿@model ShowDiaryViewModel
 @{
-    ViewData["Title"] = "";
+    ViewData["Title"] = "Show";
     Layout = "_Layout";
 }
 
 <div class="text-center">
-    <p>Лол кек чебурек</p>
+    <h1 class="display-4">Посмотреть дневник погоды</h1>
+    <p>Вы выбрали город: @Model.Options.CityName</p>
+    <br><br>
+    @if (Model.Records.Count() == 0)
+    {
+        <p>В дневнике пока нет записей</p>
+    }
+    else if (Model.NumOfOptions == 0)
+    {
+        <p>Вы не выбрали ни одного показателя погоды</p>
+    }
+    else
+    {
+        <table class="details_table" border="1">
+            <tr>
+                <th class="text_details" rowspan="2">Дата</th>
+                <th class="text_details" colspan="@Model.NumOfOptions">День</th>
+            </tr>
+            <tr>
+                @if (Model.Options.Temperature)
+                {
+                    <th class="text_details">Температура</th>
+                }
+                @if (Model.Options.Pressure)
+                {
+                    <th class="text_details">Давление</th>
+                }
+                @if (Model.Options.Cloudy)
+                {
+                    <th class="text_details">Облачность</th>
+                }
+                @if (Model.Options.Precipitations)
+                {
+                    <th class="text_details">Осадки</th>
+                }
+                @if (Model.Options.Phenomena)
+                {
+                    <th class="text_details">Явления</th>
+                }
+                @if (Model.Options.Wind)
+                {
+                    <th class="text_details">Ветер</th>
+                }
+            </tr>
+
+            @foreach (var item in Model.Records.Where(i => i.TimeOfDay == Common.TimesOfDay.Day))
+            {
+                <tr>
+                    <td class="text_details">
+                        @(item.Date.Day).@(item.Date.Month).@(item.Date.Year)
+                    </td>
+                    @if (Model.Options.Temperature)
+                    {
+                        <td class="text_details">
+                            @item.WeatherIndicator.Temperature °C
+                        </td>
+                    }
+                    @if (Model.Options.Pressure)
+                    {
+                        <td class="text_details">
+                            @item.WeatherIndicator.Pressure мм рт. ст.
+                        </td>
+                    }
+                    @if (Model.Options.Cloudy)
+                    {
+                        <td class="text_details">
+                            <img src="~/legend/cloudy/@(item.WeatherIndicator.Cloudy).png">
+                        </td>
+                    }
+                    @if (Model.Options.Precipitations)
+                    {
+                        <td class="text_details">
+                            <img src="~/legend/precipitations/@(item.WeatherIndicator.Precipitation).png">
+                        </td>
+                    }
+                    @if (Model.Options.Phenomena)
+                    {
+                        <td class="text_details">
+                            <img src="~/legend/phenomena/@(item.WeatherIndicator.Phenomena).png">
+                        </td>
+                    }
+                    @if (Model.Options.Wind)
+                    {
+                        <td class="text_details">
+                            @item.WeatherIndicator.WindSpeed м/с <img src="~/legend/wind/@(item.WeatherIndicator.WindDirection).png">
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+
+        <table class="details_table" border="1">
+            <tr><th class="text_details" colspan="@Model.NumOfOptions">Вечер</th></tr>
+            <tr>
+                @if (Model.Options.Temperature)
+                {
+                    <th class="text_details">Температура</th>
+                }
+                @if (Model.Options.Pressure)
+                {
+                    <th class="text_details">Давление</th>
+                }
+                @if (Model.Options.Cloudy)
+                {
+                    <th class="text_details">Облачность</th>
+                }
+                @if (Model.Options.Precipitations)
+                {
+                    <th class="text_details">Осадки</th>
+                }
+                @if (Model.Options.Phenomena)
+                {
+                    <th class="text_details">Явления</th>
+                }
+                @if (Model.Options.Wind)
+                {
+                    <th class="text_details">Ветер</th>
+                }
+            </tr>
+
+            @foreach (var item in Model.Records.Where(i => i.TimeOfDay == Common.TimesOfDay.Evening))
+            {
+                <tr>
+                    @if (Model.Options.Temperature)
+                    {
+                        <td class="text_details">
+                            @item.WeatherIndicator.Temperature °C
+                        </td>
+                    }
+                    @if (Model.Options.Pressure)
+                    {
+                        <td class="text_details">
+                            @item.WeatherIndicator.Pressure мм рт. ст.
+                        </td>
+                    }
+                    @if (Model.Options.Cloudy)
+                    {
+                        <td class="text_details">
+                            <img src="~/legend/cloudy/@(item.WeatherIndicator.Cloudy).png">
+                        </td>
+                    }
+                    @if (Model.Options.Precipitations)
+                    {
+                        <td class="text_details">
+                            <img src="~/legend/precipitations/@(item.WeatherIndicator.Precipitation).png">
+                        </td>
+                    }
+                    @if (Model.Options.Phenomena)
+                    {
+                        <td class="text_details">
+                            <img src="~/legend/phenomena/@(item.WeatherIndicator.Phenomena).png">
+                        </td>
+                    }
+                    @if (Model.Options.Wind)
+                    {
+                        <td class="text_details">
+                            @item.WeatherIndicator.WindSpeed м/с <img src="~/legend/wind/@(item.WeatherIndicator.WindDirection).png">
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    }
 </div>

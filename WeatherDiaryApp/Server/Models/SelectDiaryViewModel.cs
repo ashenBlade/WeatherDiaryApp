@@ -19,9 +19,9 @@ namespace Server
                                     new WeatherCondition() { NameEn = "Temperature", NameRu = "Температура" },
                                     new WeatherCondition() { NameEn = "Precipitations", NameRu = "Осадки" },
                                     new WeatherCondition() { NameEn = "Pressure", NameRu = "Давление" },
-                                    new WeatherCondition() {NameEn = "Wind", NameRu = "Ветер" },
-                                    new WeatherCondition() {NameEn = "Cloudy", NameRu = "Облачность"},
-                                    new WeatherCondition() {NameEn = "Phenomena", NameRu = "Явление"}
+                                    new WeatherCondition() { NameEn = "Wind", NameRu = "Ветер" },
+                                    new WeatherCondition() { NameEn = "Cloudy", NameRu = "Облачность" },
+                                    new WeatherCondition() { NameEn = "Phenomena", NameRu = "Явление" }
                                 };
         }
 
