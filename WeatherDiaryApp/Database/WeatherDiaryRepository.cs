@@ -96,6 +96,36 @@ namespace Database
                 .ToList();
         }
 
+        public List<Common.WeatherRecord> GetRecords (string userEmail, string cityName)
+        {
+            using var context = new WeatherDiaryContext(ContextOptions);
+            var user = context.Users.FirstOrDefault(u => u.Email == userEmail);
+            var city = context.Cities.FirstOrDefault(c => c.Name == cityName);
+
+            var userCities = context.UserCities
+                .Where(uc => uc.UserId == user.Id && uc.CityId == city.Id);
+            foreach (var uc in userCities)
+            {
+                context.Entry(uc)
+                    .Reference(uc => uc.City)
+                    .Load();
+                context.Entry(uc.City)
+                    .Collection(c => c.WeatherRecords)
+                    .Load();
+                foreach (var wr in uc.City.WeatherRecords)
+                {
+                    context.Entry(wr)
+                        .Reference(wr => wr.WeatherIndicator)
+                        .Load();
+                }
+            }
+            return userCities
+                .SelectMany(uc => uc.City.WeatherRecords
+                    .Where(wr => wr.Date >= uc.DateStart && (!uc.DateEnd.HasValue || wr.Date <= uc.DateEnd)))
+                .Select(ConvertToCommon)
+                .ToList();
+        }
+
         public List<string> GetSubscribedCityNamesForUser (string userEmail)
         {
             using var context = new WeatherDiaryContext(ContextOptions);
