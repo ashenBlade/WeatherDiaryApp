@@ -22,6 +22,12 @@ namespace Database
                 var initializer = new Initializer();
                 initializer.SeedCity(context);
             }
+
+            if (!context.WeatherRecords.Any())
+            {
+                var initializer = new Initializer();
+                initializer.SeedWeather(context);
+            }
         }
 
         public Common.User AddUser (string email, string password)

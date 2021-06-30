@@ -2,7 +2,7 @@ namespace Database
 {
     public enum Phenomena
     {
-        Rainbow,
+        None,
         Thunderstorm,
         Snowstorm,
         Ice,

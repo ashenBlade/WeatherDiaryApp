@@ -1,5 +1,5 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
+using CsvHelper.Configuration.Attributes;
 
 namespace Database
 {
@@ -8,8 +8,8 @@ namespace Database
         public City City { get; set; }
         public int CityId { get; set; }
 
+        [Format("dd.MM.yyyy")]
         public DateTime Date { get; set; }
-
         public int Id { get; set; }
 
         public TimesOfDay TimeOfDay { get; set; }

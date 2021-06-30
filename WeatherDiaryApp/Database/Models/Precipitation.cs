@@ -2,9 +2,11 @@ namespace Database
 {
     public enum Precipitation
     {
+        None,
         Rain,
         Hail,
         Snow,
-        Drizzle
+        Drizzle,
+        SnowGroats
     }
 }
