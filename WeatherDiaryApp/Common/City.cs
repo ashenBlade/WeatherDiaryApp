@@ -5,13 +5,13 @@ namespace Common
     public class City
     {
         public City() { }
-        public City(string name, DateTime time)
+        public City(string name, TimeSpan timeZone)
         {
             Name = name;
-            Time = time;
+            TimeZone = timeZone;
         }
 
         public string Name { get; set; }
-        public DateTime Time { get; set; }
+        public TimeSpan TimeZone { get; set; }
     }
 }

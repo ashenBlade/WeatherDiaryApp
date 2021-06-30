@@ -10,6 +10,7 @@ namespace Server
     //класс для view главной страницы
     public class SelectDiaryViewModel
     {
+
         public SelectDiaryViewModel(string userEmail, IWeatherDiaryRepository repository)
         {
             Cities = repository.GetSubscribedCityNamesForUser(userEmail).OrderBy(c => c);
@@ -19,7 +20,8 @@ namespace Server
                                     new WeatherCondition() { NameEn = "Precipitations", NameRu = "Осадки" },
                                     new WeatherCondition() { NameEn = "Pressure", NameRu = "Давление" },
                                     new WeatherCondition() {NameEn = "Wind", NameRu = "Ветер" },
-                                    new WeatherCondition() {NameEn = "Cloudy", NameRu = "Облачность"}
+                                    new WeatherCondition() {NameEn = "Cloudy", NameRu = "Облачность"},
+                                    new WeatherCondition() {NameEn = "Phenomena", NameRu = "Явление"}
                                 };
         }
 
