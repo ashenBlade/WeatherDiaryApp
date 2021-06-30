@@ -54,9 +54,8 @@ namespace Server.Controllers
         [HttpPost]
         public IActionResult Select([FromForm] SelectDiaryOptions options)
         {
-            string email = HttpContext.User.Identity.Name;
-            var model = new SelectDiaryViewModel(email, repository);
-            return View(model);
+            var myoptions = options;
+            return RedirectToAction("Show", new { options = myoptions});
         }
 
         [HttpGet]
@@ -84,16 +83,15 @@ namespace Server.Controllers
         [HttpGet]
         public IActionResult Show()
         {
-            string email = HttpContext.User.Identity.Name;
-            var model = new ShowDiaryViewModel(email, repository, new SelectDiaryOptions());
+            var model = new ShowDiaryViewModel();
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Show(string kek)
+        public IActionResult Show(SelectDiaryOptions options)
         {
             string email = HttpContext.User.Identity.Name;
-            var model = new ShowDiaryViewModel(email, repository, new SelectDiaryOptions());
+            var model = new ShowDiaryViewModel(email, repository, options);
             return View(model);
         }
 
