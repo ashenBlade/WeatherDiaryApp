@@ -20,7 +20,7 @@ namespace Database
             if (!context.Cities.Any())
             {
                 var initializer = new Initializer();
-                initializer.SeedCity(context);
+                initializer.Seed(context);
             }
         }
 
@@ -94,10 +94,10 @@ namespace Database
                 .Include(u => u.UserCities)
                     .ThenInclude(uc => uc.City)
                 .FirstOrDefault(u => u.Email == userEmail);
-            return user?.UserCities
+            return user.UserCities
                 .Where(uc => !uc.DateEnd.HasValue)
                 .Select(uc => uc.City.Name)
-                .ToList() ?? new List<string>();
+                .ToList();
         }
 
         public User GetUser (string email, string password)
