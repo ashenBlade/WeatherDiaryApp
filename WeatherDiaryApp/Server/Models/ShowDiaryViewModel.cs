@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 namespace Server.Models
 {
-    public class DiaryDetailsViewModel
+    public class ShowDiaryViewModel
     {
-        public DiaryDetailsViewModel(IEnumerable<WeatherRecord> weatherRecords)
+        public ShowDiaryViewModel() { }
+
+        public ShowDiaryViewModel(IEnumerable<WeatherRecord> weatherRecords)
         {
             Records = weatherRecords ?? throw new ArgumentNullException(nameof(weatherRecords));
         }
