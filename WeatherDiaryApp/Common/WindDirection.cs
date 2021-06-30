@@ -2,7 +2,6 @@ namespace Common
 {
     public enum WindDirection
     {
-        Empty,
         N,
         NW,
         NE,
