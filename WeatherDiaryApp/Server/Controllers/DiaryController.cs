@@ -54,9 +54,9 @@ namespace Server.Controllers
         [HttpPost]
         public IActionResult Select([FromForm] SelectDiaryOptions options)
         {
-            string email = HttpContext.User.Identity.Name;
-            var model = new SelectDiaryViewModel(email, repository);
-            return View(model);
+            //string email = HttpContext.User.Identity.Name;
+            //var model = new SelectDiaryViewModel(email, repository);
+            return RedirectToAction("Show");
         }
 
         [HttpGet]
@@ -78,6 +78,22 @@ namespace Server.Controllers
                 message = "Дневник успешно остановлен";
             }
             var model = new UnsubscribeViewModel(email, message, repository);
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Show()
+        {
+            string email = HttpContext.User.Identity.Name;
+            var model = new ShowDiaryViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Show(string kek)
+        {
+            string email = HttpContext.User.Identity.Name;
+            var model = new ShowDiaryViewModel();
             return View(model);
         }
 
