@@ -13,7 +13,7 @@ namespace Database.SeedData
 {
     internal class Initializer
     {
-        public void Seed (WeatherDiaryContext context)
+        public void SeedCity (WeatherDiaryContext context)
         {
             using (StreamReader reader = new StreamReader(@"../Database/SeedData/city.csv"))
             {
