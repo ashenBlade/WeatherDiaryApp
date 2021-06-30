@@ -1,0 +1,51 @@
+﻿body {
+}
+
+.left_table {
+    /*border: dotted;*/
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 75px;
+}
+
+.right_table {
+    /*border: dotted;*/
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 75px;
+}
+
+.center_table {
+    /*border: dotted;*/
+    display: inline-block;
+    vertical-align: top;
+}
+
+.details_table {
+    vertical-align: top;
+    display: inline-block;
+    margin-right: -3px;
+    margin-left: -3px;
+}
+
+p {
+    font-size: 18pt;
+}
+
+.success_message {
+    color: green;
+}
+
+.text_enumeration {
+    
+    padding-left: 20px;
+    font-size: 18pt;
+    text-align: left;
+}
+
+.text_details {
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 10pt;
+    text-align: center;
+}
