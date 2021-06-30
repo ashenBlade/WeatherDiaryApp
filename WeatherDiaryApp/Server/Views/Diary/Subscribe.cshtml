@@ -9,13 +9,9 @@
     <p>Мы начнём заполнять ваш дневник погоды, начиная с сегодняшней даты</p>
     <br><br>
     <form method="post" action="~/Diary/Subscribe">
-        <select id="selectID">
-            @foreach (var item in Model.Citys)
-            {
-                <option name="city" value=”@item”>@item</option>
-
-            }
-        </select>
+        @Html.DropDownListFor(model => model.Cities,
+                              new SelectList(Model.Cities.OrderBy(c => c)),
+                              "Выберите город")
         <br><br><br><br>
         <input type="submit" value="Добавить новый дневник" />
     </form>

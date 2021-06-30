@@ -56,7 +56,7 @@ namespace Server.Controllers
 
             await Authenticate(HttpContext, user);
 
-            return RedirectToAction("Get", "Diary");
+            return RedirectToAction("Select", "Diary");
         }
 
         [HttpGet]

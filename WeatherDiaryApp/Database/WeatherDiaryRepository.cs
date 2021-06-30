@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Database.SeedData;
 
 namespace Database
 {
@@ -14,6 +15,13 @@ namespace Database
             ContextOptions = new DbContextOptionsBuilder<WeatherDiaryContext>()
                 .UseSqlite(connectionString)
                 .Options;
+
+            using var context = new WeatherDiaryContext(ContextOptions);
+            if (!context.Cities.Any())
+            {
+                var initializer = new Initializer();
+                initializer.Seed(context);
+            }
         }
 
         public User AddUser (string email, string password)
@@ -32,6 +40,14 @@ namespace Database
                 .Any(x => x.Email == email);
         }
 
+        public List<string> GetAllCities ()
+        {
+            using var context = new WeatherDiaryContext(ContextOptions);
+            return context.Cities
+                .Select(c => c.Name)
+                .ToList();
+        }
+
         public City GetCity (string name)
         {
             using var context = new WeatherDiaryContext(ContextOptions);
@@ -43,9 +59,11 @@ namespace Database
                 .FirstOrDefault(c => c.Name == name);
         }
 
-        public List<WeatherRecord> GetRecords (User user, City city, DateTime date)
+        public List<WeatherRecord> GetRecords (string userEmail, string cityName, DateTime date)
         {
             using var context = new WeatherDiaryContext(ContextOptions);
+            var user = context.Users.FirstOrDefault(u => u.Email == userEmail);
+            var city = context.Cities.FirstOrDefault(c => c.Name == cityName);
             var userCity = context.UserCities
                 .Include(uc => uc.City)
                     .ThenInclude(c => c.WeatherRecords)
@@ -59,6 +77,19 @@ namespace Database
                 .Where(wr =>
                     wr.Date >= userCity.DateStart &&
                     (!userCity.DateEnd.HasValue || wr.Date <= userCity.DateEnd))
+                .ToList();
+        }
+
+        public List<string> GetSubscribedCitiesForUser (string userEmail)
+        {
+            using var context = new WeatherDiaryContext(ContextOptions);
+            var user = context.Users
+                .Include(u => u.UserCities)
+                    .ThenInclude(uc => uc.City)
+                .FirstOrDefault(u => u.Email == userEmail);
+            return user.UserCities
+                .Where(uc => !uc.DateEnd.HasValue)
+                .Select(uc => uc.City.Name)
                 .ToList();
         }
 
@@ -82,11 +113,11 @@ namespace Database
             context.SaveChanges();
         }
 
-        public void StartDiary (User user, City city)
+        public void StartDiary (string userEmail, string cityName)
         {
             using var context = new WeatherDiaryContext(ContextOptions);
-            user = context.Users.Find(user.Id);
-            city = context.Cities.Find(city.Id);
+            var user = context.Users.FirstOrDefault(u => u.Email == userEmail);
+            var city = context.Cities.FirstOrDefault(c => c.Name == cityName);
             context.UserCities.Add(new UserCity
             {
                 User = user,
@@ -96,9 +127,11 @@ namespace Database
             context.SaveChanges();
         }
 
-        public void StopDiary (User user, City city)
+        public void StopDiary (string userEmail, string cityName)
         {
             using var context = new WeatherDiaryContext(ContextOptions);
+            var user = context.Users.FirstOrDefault(u => u.Email == userEmail);
+            var city = context.Cities.FirstOrDefault(c => c.Name == cityName);
             var userCity = context.UserCities.FirstOrDefault(uc =>
                 uc.UserId == user.Id &&
                 uc.CityId == city.Id &&
