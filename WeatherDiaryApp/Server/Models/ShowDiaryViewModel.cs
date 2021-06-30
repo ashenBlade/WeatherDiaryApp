@@ -7,6 +7,7 @@ namespace Server.Models
 {
     public class ShowDiaryViewModel
     {
+        public ShowDiaryViewModel () { }
         public ShowDiaryViewModel(string userEmail, IWeatherDiaryRepository repository, SelectDiaryOptions options)
         {
             Records = repository.GetRecords(userEmail, options.CityName, DateTime.Now);
