@@ -17,11 +17,9 @@ namespace Server.Controllers
         public DiaryController(IWeatherDiaryRepository repository)
         {
             this.repository = repository;
-            selectedOptions = new SelectDiaryOptions();
         }
 
         private IWeatherDiaryRepository repository;
-        private SelectDiaryOptions selectedOptions { get; set; }
 
         [HttpGet]
         public IActionResult Subscribe()
@@ -56,8 +54,17 @@ namespace Server.Controllers
         [HttpPost]
         public IActionResult Select([FromForm] SelectDiaryOptions options)
         {
-            selectedOptions = options;
-            return RedirectToAction("Show");
+            return RedirectToAction("Show",
+                new
+                {
+                    cityName = options.CityName,
+                    temperature = options.Temperature,
+                    pressure = options.Pressure,
+                    wind = options.Wind,
+                    precipitations = options.Precipitations,
+                    phenomena = options.Phenomena,
+                    cloude = options.Cloudy
+                });
         }
 
         [HttpGet]
@@ -82,18 +89,31 @@ namespace Server.Controllers
             return View(model);
         }
 
-        [HttpGet]
+        [HttpPost]
         public IActionResult Show()
         {
             var model = new ShowDiaryViewModel();
             return View(model);
         }
 
-        [HttpPost]
-        public IActionResult Show(string value)
+        [HttpGet]
+        public IActionResult Show(string cityName,
+            bool temperature,
+            bool pressure,
+            bool wind,
+            bool precipitations,
+            bool phenomena,
+            bool cloudy)
         {
+            var options = new SelectDiaryOptions(cityName,
+                temperature,
+                pressure,
+                wind,
+                precipitations,
+                phenomena,
+                cloudy);
             string email = HttpContext.User.Identity.Name;
-            var model = new ShowDiaryViewModel(email, repository, selectedOptions);
+            var model = new ShowDiaryViewModel(email, repository, options);
             return View(model);
         }
 
