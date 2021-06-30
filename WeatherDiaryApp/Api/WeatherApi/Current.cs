@@ -19,7 +19,7 @@ namespace Api.WeatherApi
         /// <summary>
         /// Wind direction in form of "WSW"
         /// </summary>
-        [JsonPropertyName("wind_mb")]
+        [JsonPropertyName("wind_dir")]
         public string WindDirection { get; set; }
 
         /// <summary>
