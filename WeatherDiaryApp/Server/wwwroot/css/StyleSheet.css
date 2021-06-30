@@ -21,7 +21,14 @@
     vertical-align: top;
 }
 
-p{
+.details_table {
+    vertical-align: top;
+    display: inline-block;
+    margin-right: -3px;
+    margin-left: -3px;
+}
+
+p {
     font-size: 18pt;
 }
 
@@ -30,7 +37,15 @@ p{
 }
 
 .text_enumeration {
+    
     padding-left: 20px;
     font-size: 18pt;
     text-align: left;
+}
+
+.text_details {
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 10pt;
+    text-align: center;
 }
