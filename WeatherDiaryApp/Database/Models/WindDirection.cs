@@ -2,6 +2,7 @@ namespace Database
 {
     public enum WindDirection
     {
+        Empty,
         N,
         NW,
         NE,
