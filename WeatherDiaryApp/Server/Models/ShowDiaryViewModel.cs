@@ -9,10 +9,10 @@ namespace Server.Models
     {
         public ShowDiaryViewModel(string userEmail, IWeatherDiaryRepository repository, SelectDiaryOptions options)
         {
-            var fullRecords = repository.GetRecords(userEmail, options.CityName, DateTime.Now);
+            Records = repository.GetRecords(userEmail, options.CityName, DateTime.Now);
         }
 
-        public IEnumerable<Database.WeatherRecord> Records { get; set; }
+        public IEnumerable<Common.WeatherRecord> Records { get; set; }
         public SelectDiaryOptions Options { get; set; }
     }
 }
