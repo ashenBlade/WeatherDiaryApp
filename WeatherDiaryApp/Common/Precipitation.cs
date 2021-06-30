@@ -5,6 +5,7 @@ namespace Common
         Rain,
         Hail,
         Snow,
-        Drizzle
+        Drizzle,
+        SnowGroats
     }
 }
