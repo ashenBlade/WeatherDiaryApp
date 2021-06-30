@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Database;
 using Server.Infrastructure;
 
 namespace Server
@@ -9,9 +10,9 @@ namespace Server
     //класс для view главной страницы
     public class SelectDiaryViewModel
     {
-        public SelectDiaryViewModel()
+        public SelectDiaryViewModel(string userEmail, IWeatherDiaryRepository repository)
         {
-            Cities = new[] { "Казань", "Екатеринбург", "Москва" };
+            Cities = repository.GetSubscribedCitiesForUser(userEmail).OrderBy(c => c);
             WeatherСonditions = new[]
                                 {
                                     new WeatherCondition() { NameEn = "Temperature", NameRu = "Температура" },
