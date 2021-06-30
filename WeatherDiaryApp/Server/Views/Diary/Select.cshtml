@@ -1,6 +1,6 @@
-@model GetDiaryViewModel
+@model SelectDiaryViewModel
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Выбрать";
     Layout = "_Layout";
 }
 
@@ -8,19 +8,11 @@
     <h1 class="display-4">Показать дневник погоды</h1>
     <p>Выберите дневник, который хотите посмотреть</p>
     <br><br>
-    <form method="post" action="~/Diary/Get">
+    <form method="post" asp-action="Select">
         <table class="left_table">
-            @foreach (var item in Model.Cities)
-             {
-                <tr>
-                    <td>
-                        <input type="radio" name="city" value="@item" />
-                    </td>
-                    <td class="text_enumeration">
-                        <div>@item.ToString()</div>
-                    </td>
-                </tr>
-             }
+            @Html.DropDownListFor(model => model.Cities,
+                                  new SelectList(Model.Cities),
+                                  "Выберите город")
         </table>
         <table class="right_table">
             @foreach (var item in Model.WeatherСonditions)
@@ -28,11 +20,11 @@
                 <tr>
                     <td vertical-align: central>
                         <div>
-                            <input type="checkbox" name="city" value="@item" />
+                            <input type="checkbox" name="@item.NameEn" value="true" />
                         </div>
                     </td>
                     <td class="text_enumeration">
-                        <div>@item.ToString()</div>
+                        <div>@item.NameRu</div>
                     </td>
                 </tr>
              }

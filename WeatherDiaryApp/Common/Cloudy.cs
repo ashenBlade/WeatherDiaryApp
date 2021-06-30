@@ -5,7 +5,6 @@ namespace Common
         Cloudless,
         PartlyCloud,
         AverageCloud,
-        CloudWithGaps,
         SolidCloud
     }
 }

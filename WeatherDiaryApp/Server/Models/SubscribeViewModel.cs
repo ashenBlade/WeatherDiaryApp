@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Database;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,13 +9,15 @@ namespace Server
     //класс для view главной страницы
     public class SubscribeViewModel
     {
-        public SubscribeViewModel(string successMessage = null)
+        public SubscribeViewModel() { }
+
+        public SubscribeViewModel(string userEmail, string successMessage, IWeatherDiaryRepository repository)
         {
-            Citys = new[] { "Москва", "Санкт-Петербург", "Казань", "Екатеринбург" };
+            Cities = repository.GetAllCityNames().OrderBy(c => c).Except(repository.GetSubscribedCityNamesForUser(userEmail));
             SuccessMessage = successMessage;
         }
 
-        public IEnumerable<string> Citys { get; set; }
+        public IEnumerable<string> Cities { get; set; }
         public string SuccessMessage { get; set; }
     }
 }

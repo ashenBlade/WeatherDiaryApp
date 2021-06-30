@@ -63,7 +63,7 @@ namespace Server
             {
                 endpoints.MapControllerRoute(
                                              name: "default",
-                                             pattern: "{controller=Diary}/{action=Get}/{id?}");
+                                             pattern: "{controller=Diary}/{action=Select}/{id?}");
             });
         }
 
