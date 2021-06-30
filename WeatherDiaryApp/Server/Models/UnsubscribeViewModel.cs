@@ -11,7 +11,7 @@ namespace Server
     {
         public UnsubscribeViewModel(string userEmail, string successMessage, IWeatherDiaryRepository repository)
         {
-            Cities = repository.GetSubscribedCitiesForUser(userEmail).OrderBy(c => c);
+            Cities = repository.GetSubscribedCityNamesForUser(userEmail).OrderBy(c => c);
             SuccessMessage = successMessage;
         }
 

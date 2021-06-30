@@ -12,7 +12,7 @@ namespace Server
     {
         public SelectDiaryViewModel(string userEmail, IWeatherDiaryRepository repository)
         {
-            Cities = repository.GetSubscribedCitiesForUser(userEmail).OrderBy(c => c);
+            Cities = repository.GetSubscribedCityNamesForUser(userEmail).OrderBy(c => c);
             WeatherСonditions = new[]
                                 {
                                     new WeatherCondition() { NameEn = "Temperature", NameRu = "Температура" },
