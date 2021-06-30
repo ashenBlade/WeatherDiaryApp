@@ -84,9 +84,20 @@ namespace Api.WeatherApi
 
         private static WindDirection ConvertWindDirection(WeatherApiApiResponseRaw response)
         {
-            if (response.Current.WindDirection.Length <= 2)
-                return (WindDirection)Enum.Parse(typeof(WindDirection), response.Current.WindDirection);
-            else return (WindDirection)Enum.Parse(typeof(WindDirection), response.Current.WindDirection.Substring(1));
+            if(response.Current.WindDirection.Contains('N'))
+            {
+                if (response.Current.WindDirection.Contains('W')) return WindDirection.NW;
+                if (response.Current.WindDirection.Contains('E')) return WindDirection.NE;
+                else return WindDirection.N;
+            }
+            if (response.Current.WindDirection.Contains('S')) 
+            {
+                if (response.Current.WindDirection.Contains('W')) return WindDirection.SW;
+                if (response.Current.WindDirection.Contains('E')) return WindDirection.SE;
+                else return WindDirection.S;
+            }
+            if (response.Current.WindDirection.Contains('W')) return WindDirection.W;
+            else return WindDirection.E;
         }
 
         private static Precipitation ConvertPrecipitations(WeatherApiApiResponseRaw response)
