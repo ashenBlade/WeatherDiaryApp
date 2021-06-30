@@ -5,23 +5,23 @@ namespace Database
 {
     public interface IWeatherDiaryRepository
     {
-        User AddUser (string email, string password);
+        Common.User AddUser (string email, string password);
 
         bool ContainsUser (string userEmail);
 
-        List<City> GetAllCities ();
+        List<Common.City> GetAllCities ();
 
         List<string> GetAllCityNames ();
 
-        City GetCity (string name);
+        Common.City GetCity (string name);
 
-        List<WeatherRecord> GetRecords (string userEmail, string cityName, DateTime time);
+        List<Common.WeatherRecord> GetRecords (string userEmail, string cityName, DateTime time);
 
         List<string> GetSubscribedCityNamesForUser (string userEmail);
 
-        User GetUser (string userEmail, string password);
+        Common.User GetUser (string userEmail, string password);
 
-        void SaveRecord (WeatherRecord record);
+        void SaveRecord (Common.WeatherRecord record);
 
         void StartDiary (string userEmail, string cityName);
 

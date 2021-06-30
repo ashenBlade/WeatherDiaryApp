@@ -24,13 +24,13 @@ namespace Database
             }
         }
 
-        public User AddUser (string email, string password)
+        public Common.User AddUser (string email, string password)
         {
             using var context = new WeatherDiaryContext(ContextOptions);
             var user = new User { Email = email, Password = password };
             context.Users.Add(user);
             context.SaveChanges();
-            return user;
+            return new Common.User { Email = user.Email, Password = user.Password };
         }
 
         public bool ContainsUser (string email)
@@ -40,10 +40,11 @@ namespace Database
                 .Any(x => x.Email == email);
         }
 
-        public List<City> GetAllCities ()
+        public List<Common.City> GetAllCities ()
         {
             using var context = new WeatherDiaryContext(ContextOptions);
             return context.Cities
+                .Select(c => ConvertToCommon(c))
                 .ToList();
         }
 
@@ -55,18 +56,19 @@ namespace Database
                 .ToList();
         }
 
-        public City GetCity (string name)
+        public Common.City GetCity (string name)
         {
             using var context = new WeatherDiaryContext(ContextOptions);
-            return context.Cities
+            var city = context.Cities
                 .Include(c => c.UserCities)
                     .ThenInclude(uc => uc.User)
                 .Include(c => c.WeatherRecords)
                     .ThenInclude(wr => wr.WeatherIndicator)
                 .FirstOrDefault(c => c.Name == name);
+            return ConvertToCommon(city);
         }
 
-        public List<WeatherRecord> GetRecords (string userEmail, string cityName, DateTime date)
+        public List<Common.WeatherRecord> GetRecords (string userEmail, string cityName, DateTime date)
         {
             using var context = new WeatherDiaryContext(ContextOptions);
             var user = context.Users.FirstOrDefault(u => u.Email == userEmail);
@@ -84,6 +86,7 @@ namespace Database
                 .Where(wr =>
                     wr.Date >= userCity.DateStart &&
                     (!userCity.DateEnd.HasValue || wr.Date <= userCity.DateEnd))
+                .Select(wr => ConvertToCommon(wr))
                 .ToList();
         }
 
@@ -100,23 +103,25 @@ namespace Database
                 .ToList() ?? new List<string>();
         }
 
-        public User GetUser (string email, string password)
+        public Common.User GetUser (string email, string password)
         {
             using var context = new WeatherDiaryContext(ContextOptions);
-            return context.Users
+            var user = context.Users
                 .Include(u => u.UserCities)
                     .ThenInclude(uc => uc.City)
                 .FirstOrDefault(user =>
                     user.Email == email &&
                     user.Password == password);
+            return ConvertToCommon(user);
         }
 
-        public void SaveRecord (WeatherRecord record)
+        public void SaveRecord (Common.WeatherRecord record)
         {
+            var databaseRecord = ConvertToDatabase(record);
             using var context = new WeatherDiaryContext(ContextOptions);
-            var city = context.Cities.Find(record.City.Id);
-            record.City = city;
-            context.WeatherRecords.Add(record);
+            var city = context.Cities.FirstOrDefault(c => c.Name == databaseRecord.City.Name);
+            databaseRecord.City = city;
+            context.WeatherRecords.Add(databaseRecord);
             context.SaveChanges();
         }
 
@@ -145,6 +150,71 @@ namespace Database
                 !uc.DateEnd.HasValue);
             userCity.DateEnd = DateTime.Now;
             context.SaveChanges();
+        }
+
+        private Common.City ConvertToCommon (City city)
+        {
+            return new Common.City { Name = city.Name, TimeZone = TimeSpan.FromHours(city.TimeZone) };
+        }
+
+        private Common.WeatherIndicator ConvertToCommon (WeatherIndicator weatherIndicator)
+        {
+            return new Common.WeatherIndicator
+            {
+                Cloudy = (Common.Cloudy)weatherIndicator.Cloudy,
+                Phenomena = (Common.Phenomena)weatherIndicator.Phenomena,
+                Precipitation = (Common.Precipitation)weatherIndicator.Precipitation,
+                Pressure = weatherIndicator.Pressure,
+                Temperature = weatherIndicator.Temperature,
+                WindDirection = (Common.WindDirection)weatherIndicator.WindDirection,
+                WindSpeed = weatherIndicator.WindSpeed
+            };
+        }
+
+        private Common.User ConvertToCommon (User user)
+        {
+            return new Common.User { Email = user.Email, Password = user.Password };
+        }
+
+        private Common.WeatherRecord ConvertToCommon (WeatherRecord weatherRecord)
+        {
+            return new Common.WeatherRecord
+            {
+                City = ConvertToCommon(weatherRecord.City),
+                Date = weatherRecord.Date,
+                TimeOfDay = (Common.TimesOfDay)weatherRecord.TimeOfDay,
+                WeatherIndicator = ConvertToCommon(weatherRecord.WeatherIndicator)
+            };
+        }
+
+        private City ConvertToDatabase (Common.City city)
+        {
+            return new City { Name = city.Name, TimeZone = city.TimeZone.Hours };
+        }
+
+        private WeatherRecord ConvertToDatabase (Common.WeatherRecord weatherRecord)
+        {
+            return new WeatherRecord
+            {
+                City = ConvertToDatabase(weatherRecord.City),
+                Date = weatherRecord.Date,
+                TimeOfDay = (TimesOfDay)weatherRecord.TimeOfDay,
+                WeatherIndicator = ConvertToDatabase(weatherRecord.WeatherIndicator)
+            };
+        }
+
+        private WeatherIndicator ConvertToDatabase (Common.WeatherIndicator weatherIndicator)
+        {
+            return new WeatherIndicator
+            {
+                Cloudy = (Cloudy)weatherIndicator.Cloudy,
+                Phenomena = (Phenomena)weatherIndicator.Phenomena,
+                Precipitation = (Precipitation)weatherIndicator.Precipitation,
+                Pressure = weatherIndicator.Pressure,
+                Temperature = weatherIndicator.Temperature,
+                WindDirection = (WindDirection)weatherIndicator.WindDirection,
+                WindSpeed = weatherIndicator.WindSpeed
+            };
         }
     }
 }
