@@ -13,7 +13,7 @@ namespace Server
 
         public SubscribeViewModel(string userEmail, string successMessage, IWeatherDiaryRepository repository)
         {
-            Cities = repository.GetAllCities().OrderBy(c => c).Except(repository.GetSubscribedCitiesForUser(userEmail));
+            Cities = repository.GetAllCityNames().OrderBy(c => c).Except(repository.GetSubscribedCityNamesForUser(userEmail));
             SuccessMessage = successMessage;
         }
 

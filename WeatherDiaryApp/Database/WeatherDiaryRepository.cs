@@ -40,7 +40,14 @@ namespace Database
                 .Any(x => x.Email == email);
         }
 
-        public List<string> GetAllCities ()
+        public List<City> GetAllCities ()
+        {
+            using var context = new WeatherDiaryContext(ContextOptions);
+            return context.Cities
+                .ToList();
+        }
+
+        public List<string> GetAllCityNames ()
         {
             using var context = new WeatherDiaryContext(ContextOptions);
             return context.Cities
@@ -80,7 +87,7 @@ namespace Database
                 .ToList();
         }
 
-        public List<string> GetSubscribedCitiesForUser (string userEmail)
+        public List<string> GetSubscribedCityNamesForUser (string userEmail)
         {
             using var context = new WeatherDiaryContext(ContextOptions);
             var user = context.Users
