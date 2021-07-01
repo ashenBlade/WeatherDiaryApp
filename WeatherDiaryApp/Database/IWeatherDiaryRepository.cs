@@ -17,6 +17,8 @@ namespace Database
 
         List<Common.WeatherRecord> GetRecords (string userEmail, string cityName, DateTime time);
 
+        List<Common.WeatherRecord> GetRecords (string userEmail, string cityName);
+
         List<string> GetSubscribedCityNamesForUser (string userEmail);
 
         Common.User GetUser (string userEmail, string password);
