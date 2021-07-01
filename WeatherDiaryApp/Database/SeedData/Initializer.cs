@@ -17,7 +17,9 @@ namespace Database.SeedData
     {
         public void SeedCity (WeatherDiaryContext context)
         {
-            using StreamReader reader = new StreamReader(@"../Database/SeedData/city.csv");
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "SeedData/city.csv");
+            using StreamReader reader = new StreamReader(path);
+
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 MissingFieldFound = null,
@@ -31,7 +33,8 @@ namespace Database.SeedData
 
         public void SeedWeather (WeatherDiaryContext context)
         {
-            using StreamReader reader = new StreamReader(@"../Database/SeedData/records.csv");
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "SeedData/records.csv");
+            using StreamReader reader = new StreamReader(path);
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 MissingFieldFound = null,

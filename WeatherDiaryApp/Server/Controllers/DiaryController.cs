@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Server.Infrastructure;
 using Server.Models;
 using Microsoft.AspNetCore.Authorization;
+using User = Common.User;
 
 namespace Server.Controllers
 {
@@ -16,7 +17,6 @@ namespace Server.Controllers
         {
             this.repository = repository;
         }
-
 
         [HttpGet]
         public IActionResult Subscribe()

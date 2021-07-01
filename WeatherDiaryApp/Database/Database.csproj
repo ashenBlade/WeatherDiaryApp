@@ -12,9 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="SeedData\city.csv">
+    <Resource Include="SeedData\city.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
