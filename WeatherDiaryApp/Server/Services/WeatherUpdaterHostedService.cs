@@ -55,18 +55,10 @@ namespace Server.Services
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            // var groups = _repository.GetAllCities()
-            //                         .GroupBy(city => city.TimeZone,
-            //                                  city => city)
-            //                         .Select(group => new { TimeZone = group.Key, Cities = group.ToList() })
-            //                         .ToList();
-            // using var scope = _factory.CreateScope();
-            // var context = scope.ServiceProvider.GetRequiredService<WeatherDiaryContext>();
             var timer = new Timer(obj =>
             {
                 using var scope = _factory.CreateScope();
                 var context = scope.ServiceProvider.GetRequiredService<WeatherDiaryContext>();
-                var repo = scope.ServiceProvider.GetRequiredService<IWeatherDiaryRepository>();
                 var api = scope.ServiceProvider.GetRequiredService<IWeatherApiRequester>();
                 var cities = context.Cities.ToList();
                 foreach (var city in cities)
@@ -85,13 +77,6 @@ namespace Server.Services
                                                      }
                               };
                     context.WeatherRecords.Add(rec);
-                    repo.SaveRecord(new Common.WeatherRecord()
-                                    {
-                                        City = new City(city.Name, TimeSpan.FromHours(city.TimeZone)),
-                                        Date = DateTime.Now,
-                                        TimeOfDay = TimesOfDay.Evening,
-                                        WeatherIndicator = resp
-                                    });
                 }
 
                 context.SaveChanges();
