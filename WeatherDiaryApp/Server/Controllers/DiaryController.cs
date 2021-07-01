@@ -35,8 +35,8 @@ namespace Server.Controllers
             if (isCityNameCorrect(city))
             {
                 repository.StartDiary(email, city.Name);
-                var succesMessage = "Дневник успешно добавлен";
-                model = new SubscribeViewModel(email, repository, successMessage: succesMessage);
+                var successMessage = "Дневник успешно добавлен";
+                model = new SubscribeViewModel(email, repository, successMessage: successMessage);
             }
             return View(model);
         }
