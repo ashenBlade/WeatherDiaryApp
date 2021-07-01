@@ -17,9 +17,6 @@
 
     <ItemGroup>
       <Folder Include="wwwroot\legend\cloudy" />
-      <Folder Include="wwwroot\legend\phenomena" />
-      <Folder Include="wwwroot\legend\precipitations" />
-      <Folder Include="wwwroot\legend\wind" />
     </ItemGroup>
 
     <ItemGroup>

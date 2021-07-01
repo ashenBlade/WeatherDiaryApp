@@ -5,7 +5,6 @@ namespace Database
         Cloudless,
         PartlyCloud,
         AverageCloud,
-        CloudWithGaps,
         SolidCloud
     }
 }

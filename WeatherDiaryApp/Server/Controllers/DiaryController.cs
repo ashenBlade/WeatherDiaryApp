@@ -15,9 +15,11 @@ namespace Server.Controllers
         public DiaryController(IWeatherDiaryRepository repository)
         {
             this.repository = repository;
+            selectedOptions = new SelectDiaryOptions();
         }
 
         private IWeatherDiaryRepository repository;
+        private SelectDiaryOptions selectedOptions { get; set; }
 
         [HttpGet]
         public IActionResult Subscribe()
@@ -52,8 +54,8 @@ namespace Server.Controllers
         [HttpPost]
         public IActionResult Select([FromForm] SelectDiaryOptions options)
         {
-            var myoptions = options;
-            return RedirectToAction("Show", new { options = myoptions});
+            selectedOptions = options;
+            return RedirectToAction("Show");
         }
 
         [HttpGet]
@@ -86,10 +88,10 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        public IActionResult Show(SelectDiaryOptions options)
+        public IActionResult Show(string value)
         {
             string email = HttpContext.User.Identity.Name;
-            var model = new ShowDiaryViewModel(email, repository, options);
+            var model = new ShowDiaryViewModel(email, repository, selectedOptions);
             return View(model);
         }
 
