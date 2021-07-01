@@ -13,7 +13,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using City = Common.City;
 using Cloudy = Database.Cloudy;
+using Phenomena = Database.Phenomena;
+using Precipitation = Database.Precipitation;
 using TimesOfDay = Common.TimesOfDay;
+using WindDirection = Database.WindDirection;
 
 namespace Server.Services
 {
@@ -69,12 +72,8 @@ namespace Server.Services
                                   City = city,
                                   CityId = city.Id,
                                   Date = DateTime.Today,
-                                  TimeOfDay = Database.TimesOfDay.Day,
-                                  WeatherIndicator = new Database.WeatherIndicator()
-                                                     {
-                                                         Cloudy = ( Cloudy ) resp.Cloudy,
-                                                         Pressure = resp.Pressure,
-                                                     }
+                                  TimeOfDay = GetTimesOfDay(DateTime.Now.TimeOfDay),
+                                  WeatherIndicator = ConvertToDatabaseIndicator(resp)
                               };
                     context.WeatherRecords.Add(rec);
                 }
@@ -83,55 +82,87 @@ namespace Server.Services
 
             }, cancellationToken, TimeSpan.Zero, TimeSpan.FromDays(1));
             return Task.CompletedTask;
-            // return Task.Run(() =>
-            // {
-            //     WaitUntilNextDayAt(_dayTimeMeasurement);
-            //     _dayTimer = new Timer(obj =>
-            //                           {
-            //                               if (cancellationToken.IsCancellationRequested)
-            //                               {
-            //                                   return;
-            //                               }
-            //                               foreach (var city in _cities)
-            //                               {
-            //                                   var indicator = _apiRequester.GetRecord(city.Name);
-            //                                   var record = new Common.WeatherRecord()
-            //                                                {
-            //                                                    City = city,
-            //                                                    Date = DateTime.Today,
-            //                                                    TimeOfDay = GetTimesOfDay(DateTime.Now),
-            //                                                    WeatherIndicator = indicator
-            //                                                };
-            //                                   _repository.SaveRecord(record);
-            //                               }
-            //                           },
-            //                           groups,
-            //                           TimeSpan.Zero,
-            //                           TimeSpan.FromDays(1));
-            //     _eveningTimer = new Timer(obj =>
-            //                               {
-            //                                   if (cancellationToken.IsCancellationRequested)
-            //                                   {
-            //                                       return;
-            //                                   }
-            //                                   foreach (var city in _cities)
-            //                                   {
-            //                                       var indicator = _apiRequester.GetRecord(city.Name);
-            //                                       var record = new Common.WeatherRecord()
-            //                                                    {
-            //                                                        City = city,
-            //                                                        Date = DateTime.Today,
-            //                                                        TimeOfDay = GetTimesOfDay(DateTime.Now),
-            //                                                        WeatherIndicator = indicator
-            //                                                    };
-            //                                       _repository.SaveRecord(record);
-            //                                   }
-            //                               },
-            //                               groups,
-            //                               TimeSpan.FromHours(6),
-            //                               TimeSpan.FromDays(1));
-            // }, cancellationToken);
+        }
 
+        private static Database.WeatherIndicator ConvertToDatabaseIndicator(Common.WeatherIndicator indicator)
+        {
+            var phenomena = ConvertPhenomena(indicator.Phenomena);
+            var precipitaion = ConvertPrecipitation(indicator.Precipitation);
+            var windDir = ConvertWindDirection(indicator.WindDirection);
+            var cloudy = ConvertCloudy(indicator.Cloudy);
+            return new Database.WeatherIndicator()
+                   {
+                       Cloudy = cloudy,
+                       Temperature = indicator.Temperature,
+                       Phenomena = phenomena,
+                       Precipitation = precipitaion,
+                       Pressure = indicator.Pressure,
+                       WindDirection = windDir,
+                       WindSpeed = indicator.WindSpeed,
+                   };
+        }
+
+        private static Database.Cloudy ConvertCloudy(Common.Cloudy indicatorCloudy)
+        {
+            return indicatorCloudy switch
+                   {
+                       Common.Cloudy.Cloudless    => Cloudy.Cloudless,
+                       Common.Cloudy.AverageCloud => Cloudy.AverageCloud,
+                       Common.Cloudy.PartlyCloud  => Cloudy.PartlyCloud,
+                       Common.Cloudy.SolidCloud   => Cloudy.SolidCloud,
+                   };
+        }
+
+        private static Database.TimesOfDay GetTimesOfDay(TimeSpan time)
+        {
+            return time > TimeSpan.FromHours(16)
+                       ? Database.TimesOfDay.Evening
+                       : Database.TimesOfDay.Day;
+        }
+
+        private static Database.WindDirection ConvertWindDirection(Common.WindDirection direction)
+        {
+            return direction switch
+                   {
+                       Common.WindDirection.E  => WindDirection.E,
+                       Common.WindDirection.N  => WindDirection.N,
+                       Common.WindDirection.S  => WindDirection.S,
+                       Common.WindDirection.W  => WindDirection.W,
+                       Common.WindDirection.NE => WindDirection.NE,
+                       Common.WindDirection.NW => WindDirection.NW,
+                       Common.WindDirection.SE => WindDirection.SE,
+                       Common.WindDirection.SW => WindDirection.SW,
+                       _                       => WindDirection.N
+                   };
+        }
+
+        private static Database.Precipitation ConvertPrecipitation(Common.Precipitation precipitation)
+        {
+            return precipitation switch
+                   {
+                       Common.Precipitation.Drizzle    => Precipitation.Drizzle,
+                       Common.Precipitation.Hail       => Precipitation.Hail,
+                       Common.Precipitation.None       => Precipitation.None,
+                       Common.Precipitation.Rain       => Precipitation.Rain,
+                       Common.Precipitation.Snow       => Precipitation.Snow,
+                       Common.Precipitation.SnowGroats => Precipitation.SnowGroats,
+                       _                               => Precipitation.None
+                   };
+        }
+
+        private static Database.Phenomena ConvertPhenomena(Common.Phenomena phenomena)
+        {
+            return phenomena switch
+                   {
+                       Common.Phenomena.Dew          => Phenomena.Dew,
+                       Common.Phenomena.Fog          => Phenomena.Fog,
+                       Common.Phenomena.Ice          => Phenomena.Ice,
+                       Common.Phenomena.None         => Phenomena.None,
+                       Common.Phenomena.Thunderstorm => Phenomena.Thunderstorm,
+                       Common.Phenomena.Snowstorm    => Phenomena.Snowstorm,
+                       Common.Phenomena.Hoarfrost    => Phenomena.Hoarfrost,
+                       _                             => Phenomena.None
+                   };
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
