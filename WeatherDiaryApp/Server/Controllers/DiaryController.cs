@@ -1,11 +1,9 @@
-﻿using Common;
+﻿using System;
+using Common;
 using Database;
 using Microsoft.AspNetCore.Mvc;
 using Server.Infrastructure;
 using Server.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Server.Controllers
@@ -81,7 +79,9 @@ namespace Server.Controllers
         private IActionResult Show(SelectDiaryOptions options)
         {
             var email = HttpContext.User.Identity.Name;
-            var records = repository.GetRecords(email, options.CityName);
+            var date = new DateTime(2021, 6, 15);
+            var records = repository.GetRecords(email, options.CityName, date);
+            records.Sort((r1, r2) => DateTime.Compare(r1.Date, r2.Date));
             var viewModel = new ShowDiaryViewModel() { Options = options, Records = records };
             return View("Show", viewModel);
         }
