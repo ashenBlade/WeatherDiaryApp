@@ -7,7 +7,7 @@
 <div class="text-center">
     <h1 class="display-4">Добавить новый дневник погоды</h1>
     <p>Мы начнём заполнять ваш дневник погоды, начиная с сегодняшней даты</p>
-    <br><br>
+    <br /><br />
     <form method="post" action="~/Diary/Subscribe">
         @Html.DropDownListFor(model => model.Cities,
                               new SelectList(Model.Cities.OrderBy(c => c)),
@@ -19,5 +19,10 @@
     {
         <br /><br />
         <p class="success_message">@Model.SuccessMessage</p>
+    }
+    @if (Model.ErrorMessage != null)
+    {
+        <br /><br />
+        <p class="error_message">@Model.ErrorMessage</p>
     }
 </div>
