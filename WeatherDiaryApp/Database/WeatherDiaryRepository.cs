@@ -104,6 +104,7 @@ namespace Database
                     wr.Date >= userCity.DateStart &&
                     (!userCity.DateEnd.HasValue || wr.Date <= userCity.DateEnd))
                 .Select(wr => ConvertToCommon(wr))
+                .OrderBy(r => r.Date)
                 .ToList();
         }
 
@@ -141,6 +142,7 @@ namespace Database
             return userCity.City.WeatherRecords
                 .Where(wr => wr.Date >= userCity.DateStart)
                 .Select(ConvertToCommon)
+                .OrderBy(r => r.Date)
                 .ToList();
         }
 
