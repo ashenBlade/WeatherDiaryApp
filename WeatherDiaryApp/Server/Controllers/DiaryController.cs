@@ -85,9 +85,7 @@ namespace Server.Controllers
         private IActionResult Show(SelectDiaryOptions options)
         {
             var email = HttpContext.User.Identity.Name;
-            var date = new DateTime(2021, 6, 15);
-            var records = repository.GetRecords(email, options.CityName, date);
-            records.Sort((r1, r2) => DateTime.Compare(r1.Date, r2.Date));
+            var records = repository.GetRecords(email, options.CityName);
             var viewModel = new ShowDiaryViewModel() { Options = options, Records = records };
             return View("Show", viewModel);
         }
