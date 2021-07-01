@@ -9,9 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Server.Controllers
 {
-#if !DEBUG
     [Authorize]
-#endif
     public class DiaryController : Controller
     {
         public DiaryController(IWeatherDiaryRepository repository)
