@@ -36,6 +36,10 @@ p {
     color: green;
 }
 
+.error_message {
+    color: red;
+}
+
 .text_enumeration {
     
     padding-left: 20px;

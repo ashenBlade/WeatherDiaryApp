@@ -9,7 +9,7 @@ namespace Server.Models
     public class SelectDiaryViewModel
     {
 
-        public SelectDiaryViewModel(string userEmail, IWeatherDiaryRepository repository)
+        public SelectDiaryViewModel(string userEmail, IWeatherDiaryRepository repository, string errorMessage = null)
         {
             Cities = repository.GetSubscribedCityNamesForUser(userEmail).OrderBy(c => c);
             WeatherСonditions = new[]
@@ -21,9 +21,11 @@ namespace Server.Models
                                     new WeatherCondition() { NameEn = "Cloudy", NameRu = "Облачность" },
                                     new WeatherCondition() { NameEn = "Phenomena", NameRu = "Явление" }
                                 };
+            ErrorMessage = errorMessage;
         }
 
         public IEnumerable<string> Cities { get; set; }
         public IEnumerable<WeatherCondition> WeatherСonditions { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }
