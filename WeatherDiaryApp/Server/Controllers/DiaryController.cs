@@ -1,25 +1,22 @@
-﻿using Common;
+﻿using System;
+using Common;
 using Database;
 using Microsoft.AspNetCore.Mvc;
 using Server.Infrastructure;
 using Server.Models;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Server.Controllers
 {
-#if !DEBUG
     [Authorize]
-#endif
     public class DiaryController : Controller
     {
+        private IWeatherDiaryRepository repository;
         public DiaryController(IWeatherDiaryRepository repository)
         {
             this.repository = repository;
         }
 
-        private IWeatherDiaryRepository repository;
 
         [HttpGet]
         public IActionResult Subscribe()
@@ -54,23 +51,7 @@ namespace Server.Controllers
         [HttpPost]
         public IActionResult Select([FromForm] SelectDiaryOptions options)
         {
-            if (options.CityName == null)
-            {
-                string email = HttpContext.User.Identity.Name;
-                var model = new SelectDiaryViewModel(email, repository);
-                return View(model);
-            }
-            return RedirectToAction("Show",
-                new
-                {
-                    cityName = options.CityName,
-                    temperature = options.Temperature,
-                    pressure = options.Pressure,
-                    wind = options.Wind,
-                    precipitations = options.Precipitations,
-                    phenomena = options.Phenomena,
-                    cloude = options.Cloudy
-                });
+            return Show(options);
         }
 
         [HttpGet]
@@ -95,32 +76,14 @@ namespace Server.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public IActionResult Show()
+        private IActionResult Show(SelectDiaryOptions options)
         {
-            var model = new ShowDiaryViewModel();
-            return View(model);
-        }
-
-        [HttpGet]
-        public IActionResult Show(string cityName,
-            bool temperature,
-            bool pressure,
-            bool wind,
-            bool precipitations,
-            bool phenomena,
-            bool cloudy)
-        {
-            var options = new SelectDiaryOptions(cityName,
-                temperature,
-                pressure,
-                wind,
-                precipitations,
-                phenomena,
-                cloudy);
-            string email = HttpContext.User.Identity.Name;
-            var model = new ShowDiaryViewModel(email, repository, options);
-            return View(model);
+            var email = HttpContext.User.Identity.Name;
+            var date = new DateTime(2021, 6, 15);
+            var records = repository.GetRecords(email, options.CityName, date);
+            records.Sort((r1, r2) => DateTime.Compare(r1.Date, r2.Date));
+            var viewModel = new ShowDiaryViewModel() { Options = options, Records = records };
+            return View("Show", viewModel);
         }
 
         private bool isCityNameCorrect(SelectCity city)
