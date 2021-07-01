@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Database;
 using Server.Infrastructure;
 
-namespace Server
+namespace Server.Models
 {
     //класс для view главной страницы
     public class SelectDiaryViewModel
