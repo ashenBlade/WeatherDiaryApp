@@ -22,7 +22,7 @@ namespace Server.Controllers
         public IActionResult Subscribe()
         {
             string email = HttpContext.User.Identity.Name;
-            var model = new SubscribeViewModel(email, null, repository);
+            var model = new SubscribeViewModel(email, repository);
             return View(model);
         }
 
@@ -30,13 +30,14 @@ namespace Server.Controllers
         public IActionResult Subscribe([FromForm] SelectCity city)
         {
             string email = HttpContext.User.Identity.Name;
-            string message = "Выберите город";
+            string errorMessage = "Выберите город";
+            var model = new SubscribeViewModel(email, repository, errorMessage: errorMessage);
             if (isCityNameCorrect(city))
             {
                 repository.StartDiary(email, city.Name);
-                message = "Дневник успешно добавлен";
+                var succesMessage = "Дневник успешно добавлен";
+                model = new SubscribeViewModel(email, repository, successMessage: succesMessage);
             }
-            var model = new SubscribeViewModel(email, message, repository);
             return View(model);
         }
 
@@ -51,6 +52,13 @@ namespace Server.Controllers
         [HttpPost]
         public IActionResult Select([FromForm] SelectDiaryOptions options)
         {
+            if(options.CityName == null)
+            {
+                string email = HttpContext.User.Identity.Name;
+                var errorMessage = "Выберите город";
+                var model = new SelectDiaryViewModel(email, repository, errorMessage: errorMessage);
+                return View(model);
+            }
             return Show(options);
         }
 
@@ -58,7 +66,7 @@ namespace Server.Controllers
         public IActionResult Unsubscribe()
         {
             string email = HttpContext.User.Identity.Name;
-            var model = new UnsubscribeViewModel(email, null, repository);
+            var model = new UnsubscribeViewModel(email, repository);
             return View(model);
         }
 
@@ -66,13 +74,14 @@ namespace Server.Controllers
         public IActionResult Unsubscribe([FromForm] SelectCity city)
         {
             string email = HttpContext.User.Identity.Name;
-            string message = "Вы отписались от всех дневников";
+            string errorMessage = "Вы отписались от всех дневников";
+            var model = new UnsubscribeViewModel(email, repository, errorMessage: errorMessage);
             if (isCityNameCorrect(city))
             {
                 repository.StopDiary(email, city.Name);
-                message = "Дневник успешно остановлен";
+                var successMessage = "Дневник успешно остановлен";
+                model = new UnsubscribeViewModel(email, repository, successMessage: successMessage);
             }
-            var model = new UnsubscribeViewModel(email, message, repository);
             return View(model);
         }
 

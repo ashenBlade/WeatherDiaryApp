@@ -27,9 +27,14 @@
                         <div>@item.NameRu</div>
                     </td>
                 </tr>
-             }
+            }
         </table>
         <br><br><br><br>
         <input type="submit" value="Показать дневник" />
     </form>
+    @if (Model.ErrorMessage != null)
+    {
+        <br /><br />
+        <p class="error_message">@Model.ErrorMessage</p>
+    }
 </div>
