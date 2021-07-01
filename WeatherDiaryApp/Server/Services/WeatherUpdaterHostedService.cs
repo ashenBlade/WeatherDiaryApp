@@ -56,32 +56,45 @@ namespace Server.Services
         }
 
 
+        private Task WaitUntil12()
+        {
+            var nextDay = DateTime.Today.AddDays(1) + _dayTimeMeasurement;
+            var waitTime = nextDay - DateTime.Now;
+            return Task.Delay(waitTime);
+        }
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            var timer = new Timer(obj =>
+            // await WaitUntil12();
+            _dayTimer = new Timer(obj =>
             {
-                using var scope = _factory.CreateScope();
-                var context = scope.ServiceProvider.GetRequiredService<WeatherDiaryContext>();
-                var api = scope.ServiceProvider.GetRequiredService<IWeatherApiRequester>();
-                var cities = context.Cities.ToList();
-                foreach (var city in cities)
-                {
-                    var resp = api.GetRecord(city.Name);
-                    var rec = new Database.WeatherRecord()
-                              {
-                                  City = city,
-                                  CityId = city.Id,
-                                  Date = DateTime.Today,
-                                  TimeOfDay = GetTimesOfDay(DateTime.Now.TimeOfDay),
-                                  WeatherIndicator = ConvertToDatabaseIndicator(resp)
-                              };
-                    context.WeatherRecords.Add(rec);
-                }
-
-                context.SaveChanges();
-
+                SaveRecords(_factory);
+                Thread.Sleep(TimeSpan.FromHours(6));
+                SaveRecords(_factory);
             }, cancellationToken, TimeSpan.Zero, TimeSpan.FromDays(1));
             return Task.CompletedTask;
+        }
+
+        private static void SaveRecords(IServiceScopeFactory factory)
+        {
+            using var scope = factory.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<WeatherDiaryContext>();
+            var api = scope.ServiceProvider.GetRequiredService<IWeatherApiRequester>();
+            var cities = context.Cities.ToList();
+            foreach (var city in cities)
+            {
+                var resp = api.GetRecord(city.Name);
+                var rec = new Database.WeatherRecord()
+                          {
+                              City = city,
+                              CityId = city.Id,
+                              Date = DateTime.Today,
+                              TimeOfDay = GetTimesOfDay(DateTime.Now.TimeOfDay),
+                              WeatherIndicator = ConvertToDatabaseIndicator(resp)
+                          };
+                context.WeatherRecords.Add(rec);
+            }
+
+            context.SaveChanges();
         }
 
         private static Database.WeatherIndicator ConvertToDatabaseIndicator(Common.WeatherIndicator indicator)
