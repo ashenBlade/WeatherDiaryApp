@@ -33,12 +33,12 @@ namespace Tests
     {
         private Mock<IWeatherDiaryRepository> repository = new Mock<IWeatherDiaryRepository>();
 
-        [Test]
-        public void TestShowViewModelNotNull()
-        {
-            DiaryController controller = new DiaryController(repository.Object);
-            ViewResult showModel = controller.Show() as ViewResult;
-            Assert.IsNotNull(showModel);
-        }
+        // [Test]
+        // public void TestShowViewModelNotNull()
+        // {
+        //     DiaryController controller = new DiaryController(repository.Object);
+        //     ViewResult showModel = controller.Show() as ViewResult;
+        //     Assert.IsNotNull(showModel);
+        // }
     }
 }

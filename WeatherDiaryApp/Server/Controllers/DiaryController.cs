@@ -5,6 +5,7 @@ using Server.Infrastructure;
 using Server.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Server.Controllers
@@ -12,14 +13,12 @@ namespace Server.Controllers
     [Authorize]
     public class DiaryController : Controller
     {
+        private IWeatherDiaryRepository repository;
         public DiaryController(IWeatherDiaryRepository repository)
         {
             this.repository = repository;
-            selectedOptions = new SelectDiaryOptions();
         }
 
-        private IWeatherDiaryRepository repository;
-        private SelectDiaryOptions selectedOptions { get; set; }
 
         [HttpGet]
         public IActionResult Subscribe()
@@ -54,8 +53,7 @@ namespace Server.Controllers
         [HttpPost]
         public IActionResult Select([FromForm] SelectDiaryOptions options)
         {
-            selectedOptions = options;
-            return RedirectToAction("Show");
+            return Show(options);
         }
 
         [HttpGet]
@@ -80,19 +78,12 @@ namespace Server.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        public IActionResult Show()
+        private IActionResult Show(SelectDiaryOptions options)
         {
-            var model = new ShowDiaryViewModel();
-            return View(model);
-        }
-
-        [HttpPost]
-        public IActionResult Show(string value)
-        {
-            string email = HttpContext.User.Identity.Name;
-            var model = new ShowDiaryViewModel(email, repository, selectedOptions);
-            return View(model);
+            var email = HttpContext.User.Identity.Name;
+            var records = repository.GetRecords(email, options.CityName);
+            var viewModel = new ShowDiaryViewModel() { Options = options, Records = records };
+            return View("Show", viewModel);
         }
 
         private bool isCityNameCorrect(SelectCity city)
