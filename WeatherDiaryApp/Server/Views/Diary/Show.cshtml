@@ -89,7 +89,7 @@
                     @if (Model.Options.Wind)
                     {
                         <td class="text_details">
-                            @item.WeatherIndicator.WindSpeed м/с <img src="~/legend/wind/@(item.WeatherIndicator.WindDirection).png">
+                            @item.WeatherIndicator.WindSpeed м/с @Model.GetDescription(item.WeatherIndicator.WindDirection) <img src="~/legend/wind/@(item.WeatherIndicator.WindDirection).png">
                         </td>
                     }
                 </tr>
@@ -161,7 +161,7 @@
                     @if (Model.Options.Wind)
                     {
                         <td class="text_details">
-                            @item.WeatherIndicator.WindSpeed м/с <img src="~/legend/wind/@(item.WeatherIndicator.WindDirection).png">
+                            @item.WeatherIndicator.WindSpeed м/с @Model.GetDescription(item.WeatherIndicator.WindDirection) <img src="~/legend/wind/@(item.WeatherIndicator.WindDirection).png">
                         </td>
                     }
                 </tr>
