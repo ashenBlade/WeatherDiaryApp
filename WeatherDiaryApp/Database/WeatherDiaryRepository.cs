@@ -70,10 +70,6 @@ namespace Database
         {
             using var context = new WeatherDiaryContext(ContextOptions);
             var city = context.Cities.FirstOrDefault(c => c.Name == name);
-            if (city is null)
-            {
-                return null;
-            }
             return ConvertToCommon(city);
         }
 
@@ -82,10 +78,6 @@ namespace Database
             using var context = new WeatherDiaryContext(ContextOptions);
             var user = context.Users.FirstOrDefault(u => u.Email == userEmail);
             var city = context.Cities.FirstOrDefault(c => c.Name == cityName);
-            if (user is null || city is null)
-            {
-                return null;
-            }
             var userCity = context.UserCities
                 .Include(uc => uc.City)
                     .ThenInclude(c => c.WeatherRecords)
@@ -95,16 +87,11 @@ namespace Database
                     uc.CityId == city.Id &&
                     uc.DateStart <= date &&
                     (!uc.DateEnd.HasValue || uc.DateEnd.Value >= date));
-            if (userCity is null)
-            {
-                return new List<Common.WeatherRecord>();
-            }
             return userCity.City.WeatherRecords
                 .Where(wr =>
                     wr.Date >= userCity.DateStart &&
                     (!userCity.DateEnd.HasValue || wr.Date <= userCity.DateEnd))
                 .Select(wr => ConvertToCommon(wr))
-                .OrderBy(r => r.Date)
                 .ToList();
         }
 
@@ -113,17 +100,9 @@ namespace Database
             using var context = new WeatherDiaryContext(ContextOptions);
             var user = context.Users.FirstOrDefault(u => u.Email == userEmail);
             var city = context.Cities.FirstOrDefault(c => c.Name == cityName);
-            if (user is null || city is null)
-            {
-                return null;
-            }
 
             var userCity = context.UserCities
                 .FirstOrDefault(uc => uc.UserId == user.Id && uc.CityId == city.Id && !uc.DateEnd.HasValue);
-            if (userCity is null)
-            {
-                return null;
-            }
             context.Entry(userCity)
                 .Reference(uc => uc.City)
                 .Load();
@@ -142,7 +121,6 @@ namespace Database
             return userCity.City.WeatherRecords
                 .Where(wr => wr.Date >= userCity.DateStart)
                 .Select(ConvertToCommon)
-                .OrderBy(r => r.Date)
                 .ToList();
         }
 
@@ -167,7 +145,7 @@ namespace Database
             return user.UserCities
                 .Where(uc => !uc.DateEnd.HasValue)
                 .Select(uc => uc.City.Name)
-                .ToList();
+                .ToList() ?? new List<string>();
         }
 
         public Common.User GetUser (string email, string password)
@@ -189,10 +167,6 @@ namespace Database
             var databaseRecord = ConvertToDatabase(record);
             using var context = new WeatherDiaryContext(ContextOptions);
             var city = context.Cities.FirstOrDefault(c => c.Name == databaseRecord.City.Name);
-            if (city is null)
-            {
-                return;
-            }
             databaseRecord.City = city;
             context.WeatherRecords.Add(databaseRecord);
             context.SaveChanges();
@@ -203,10 +177,6 @@ namespace Database
             using var context = new WeatherDiaryContext(ContextOptions);
             var user = context.Users.FirstOrDefault(u => u.Email == userEmail);
             var city = context.Cities.FirstOrDefault(c => c.Name == cityName);
-            if (user is null || city is null)
-            {
-                return;
-            }
             context.UserCities.Add(new UserCity
             {
                 User = user,
@@ -221,18 +191,10 @@ namespace Database
             using var context = new WeatherDiaryContext(ContextOptions);
             var user = context.Users.FirstOrDefault(u => u.Email == userEmail);
             var city = context.Cities.FirstOrDefault(c => c.Name == cityName);
-            if (user is null || city is null)
-            {
-                return;
-            }
             var userCity = context.UserCities.FirstOrDefault(uc =>
                 uc.UserId == user.Id &&
                 uc.CityId == city.Id &&
                 !uc.DateEnd.HasValue);
-            if (userCity is null)
-            {
-                return;
-            }
             userCity.DateEnd = DateTime.Now;
             context.SaveChanges();
         }

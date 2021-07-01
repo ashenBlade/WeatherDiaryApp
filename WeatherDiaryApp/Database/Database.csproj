@@ -6,10 +6,15 @@
 
   <ItemGroup>
     <None Remove="SeedData\city.csv" />
+    <None Update="SeedData\records.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="SeedData\city.csv" />
+    <EmbeddedResource Include="SeedData\city.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
