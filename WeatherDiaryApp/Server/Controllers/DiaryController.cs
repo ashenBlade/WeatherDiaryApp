@@ -51,6 +51,12 @@ namespace Server.Controllers
         [HttpPost]
         public IActionResult Select([FromForm] SelectDiaryOptions options)
         {
+            if (options.CityName == null)
+            {
+                string email = HttpContext.User.Identity.Name;
+                var model = new SelectDiaryViewModel(email, repository);
+                return View(model);
+            }    
             return Show(options);
         }
 
