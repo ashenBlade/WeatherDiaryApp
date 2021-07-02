@@ -4,21 +4,21 @@ namespace Common
 {
     public enum WindDirection
     {
-        [Description("Ñ")]
+        [Description("Ð¡")]
         N,
-        [Description("ÑÂ")]
+        [Description("Ð¡Ð’")]
         NW,
-        [Description("ÑÇ")]
+        [Description("Ð¡Ð—")]
         NE,
-        [Description("Þ")]
+        [Description("Ð®")]
         S,
-        [Description("ÞÂ")]
+        [Description("Ð®Ð’")]
         SW,
-        [Description("ÞÇ")]
+        [Description("Ð®Ð—")]
         SE,
-        [Description("Â")]
+        [Description("Ð’")]
         W,
-        [Description("Ç")]
+        [Description("Ð—")]
         E
     }
 }
