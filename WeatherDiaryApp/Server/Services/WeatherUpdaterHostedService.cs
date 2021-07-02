@@ -62,9 +62,11 @@ namespace Server.Services
             var waitTime = nextDay - DateTime.Now;
             return Task.Delay(waitTime);
         }
-        public async Task StartAsync(CancellationToken cancellationToken)
+
+        private TimeSpan TimeUntil12 =>
+            DateTime.Today.AddDays(1) + _dayTimeMeasurement - DateTime.Now;
+        public Task StartAsync(CancellationToken cancellationToken)
         {
-            await WaitUntil12();
             _dayTimer = new Timer(obj =>
             {
                 if (cancellationToken.IsCancellationRequested)
@@ -74,7 +76,8 @@ namespace Server.Services
                 SaveRecords(_factory);
                 Thread.Sleep(TimeSpan.FromHours(6));
                 SaveRecords(_factory);
-            }, cancellationToken, TimeSpan.Zero, TimeSpan.FromDays(1));
+            }, cancellationToken, TimeUntil12, TimeSpan.FromDays(1));
+            return Task.CompletedTask;
         }
 
         private static void SaveRecords(IServiceScopeFactory factory)

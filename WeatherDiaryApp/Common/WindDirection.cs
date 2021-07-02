@@ -6,19 +6,19 @@ namespace Common
     {
         [Description("С")]
         N,
-        [Description("СВ")]
-        NW,
         [Description("СЗ")]
+        NW,
+        [Description("СВ")]
         NE,
         [Description("Ю")]
         S,
-        [Description("ЮВ")]
-        SW,
         [Description("ЮЗ")]
+        SW,
+        [Description("ЮВ")]
         SE,
-        [Description("В")]
-        W,
         [Description("З")]
+        W,
+        [Description("В")]
         E
     }
 }

@@ -89,6 +89,7 @@ namespace Server.Controllers
         {
             var email = HttpContext.User.Identity.Name;
             var records = repository.GetRecords(email, options.CityName);
+            records.Sort((r1, r2) => DateTime.Compare(r1.Date, r2.Date));
             var viewModel = new ShowDiaryViewModel() { Options = options, Records = records };
             return View("Show", viewModel);
         }
