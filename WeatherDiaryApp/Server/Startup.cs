@@ -37,27 +37,18 @@ namespace Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddLogging(builder => builder.AddConsole()
-                                                  .AddConfiguration(Configuration));
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .AddCookie(options =>
-                               {
-                                   options.LoginPath = new PathString("/Account/Login");
-                                   options.LogoutPath = new PathString("/Account/Logout");
-                               }
-                              );
+
+            ConfigureLogging(services, Configuration);
+
+            ConfigureAuthentication(services, Configuration);
+
+            // Storing of weather and user data
             ConfigureRepository(services, Configuration);
-            services.AddTransient<IWeatherApiRequester, WeatherApiApiRequester>();
-            services.AddSingleton<IJobFactory, MicrosoftDIJobFactory>();
-            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
-            services.AddTransient<WeatherRetrieveJob>();
-            services.AddQuartz(q =>
-            {
-                q.UseMicrosoftDependencyInjectionJobFactory();
-            });
-            services.AddQuartzHostedService(config => config.WaitForJobsToComplete = true);
-            services.AddHostedService<QuartzWeatherUpdaterHostedService>();
+
+            // Weather retrieve from server
+            ConfigureBackgroundTasks(services, Configuration);
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -86,7 +77,32 @@ namespace Server
                 endpoints.MapControllerRoute(
                                              name: "default",
                                              pattern: "{controller=Diary}/{action=Select}/{id?}");
+                endpoints.MapFallback(pattern: "/",
+                                      async context => await context.Response.WriteAsync("Fallback"));
             });
+        }
+
+        private static IServiceCollection ConfigureLogging(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddLogging(builder =>
+            {
+                builder.AddConsole()
+                       .AddConfiguration(configuration);
+            });
+            return services;
+        }
+
+        private static IServiceCollection ConfigureAuthentication(IServiceCollection services,
+                                                                  IConfiguration configuration)
+        {
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                                .AddCookie(options =>
+                                           {
+                                               options.LoginPath = new PathString("/Account/Login");
+                                               options.LogoutPath = new PathString("/Account/Logout");
+                                           }
+                                          );
+            return services;
         }
 
         private static IServiceCollection ConfigureRepository(IServiceCollection services, IConfiguration configuration)
@@ -96,6 +112,34 @@ namespace Server
             services.AddDbContext<WeatherDiaryContext>(builder =>
                                                            builder.UseSqlite(connection));
             return services;
+        }
+
+        private static IServiceCollection ConfigureBackgroundTasks(IServiceCollection services,
+                                                                   IConfiguration configuration)
+        {
+            ConfigureQuartzHostedService(services, configuration);
+            services.AddHostedService<QuartzWeatherUpdaterHostedService>();
+            return services;
+        }
+
+        private static void ConfigureQuartzHostedService(IServiceCollection services, IConfiguration configuration)
+        {
+#if DEBUG
+            services.AddTransient<IWeatherApiRequester, EmptyWeatherApiRequester>();
+#else
+            services.AddTransient<IWeatherApiRequester, WeatherApiApiRequester>();
+#endif
+            services.AddTransient<WeatherRetrieveJob>();
+
+            // Configuring Quartz.NET
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+            services.AddSingleton<IJobFactory, MicrosoftDIJobFactory>();
+            services.AddQuartz(q =>
+            {
+                q.UseMicrosoftDependencyInjectionJobFactory();
+                q.UseInMemoryStore();
+            });
+            services.AddQuartzHostedService(config => config.WaitForJobsToComplete = true);
         }
     }
 }
