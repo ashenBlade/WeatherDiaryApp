@@ -15,6 +15,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Quartz;
+using Quartz.Impl;
 using Server.Services;
 using TimesOfDay = Common.TimesOfDay;
 
@@ -43,6 +45,13 @@ namespace Server
             ConfigureRepository(services, Configuration);
             services.AddScoped<IWeatherApiRequester, WeatherApiApiRequester>();
             services.AddHostedService<WeatherUpdaterHostedService>();
+            services.AddQuartz(q =>
+            {
+                q.UseMicrosoftDependencyInjectionJobFactory();
+                var sc = new StdSchedulerFactory();
+                var s = sc.GetScheduler().GetAwaiter().GetResult();
+
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

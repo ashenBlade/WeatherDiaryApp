@@ -148,4 +148,9 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Quartz" Version="3.3.2" />
+      <PackageReference Include="Quartz.AspNetCore" Version="3.3.2" />
+    </ItemGroup>
+
 </Project>
