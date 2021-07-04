@@ -15,14 +15,16 @@ namespace Server.Services
         private readonly ILogger<WeatherRetrieveJob> _logger;
         private readonly IWeatherDiaryRepository _repository;
 
-        public WeatherRetrieveJob(IWeatherApiRequester requester, ILogger<WeatherRetrieveJob> logger, IWeatherDiaryRepository repository)
+        public WeatherRetrieveJob(IWeatherApiRequester requester,
+                                  ILogger<WeatherRetrieveJob> logger,
+                                  IWeatherDiaryRepository repository)
         {
             _requester = requester ?? throw new ArgumentNullException(nameof(requester));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public Task Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
             var answ = _requester.GetRecord("Moscow");
             _repository.SaveRecord(new Common.WeatherRecord()
@@ -32,8 +34,8 @@ namespace Server.Services
                                        TimeOfDay = TimesOfDay.Evening,
                                        WeatherIndicator = answ
                                    });
-            _logger.LogInformation("Weather saved for Moscow");
-            return Task.CompletedTask;
+            _logger.LogInformation($"Weather saved for Moscow {answ}");
+
         }
     }
 }

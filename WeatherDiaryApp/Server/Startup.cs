@@ -15,8 +15,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Quartz;
 using Quartz.Impl;
+using Quartz.Spi;
 using Server.Services;
 using TimesOfDay = Common.TimesOfDay;
 
@@ -35,6 +37,8 @@ namespace Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddLogging(builder => builder.AddConsole()
+                                                  .AddConfiguration(Configuration));
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(options =>
                                {
@@ -43,15 +47,16 @@ namespace Server
                                }
                               );
             ConfigureRepository(services, Configuration);
-            services.AddScoped<IWeatherApiRequester, WeatherApiApiRequester>();
-            services.AddHostedService<WeatherUpdaterHostedService>();
+            services.AddTransient<IWeatherApiRequester, WeatherApiApiRequester>();
+            services.AddSingleton<IJobFactory, MicrosoftDIJobFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+            services.AddTransient<WeatherRetrieveJob>();
             services.AddQuartz(q =>
             {
                 q.UseMicrosoftDependencyInjectionJobFactory();
-                var sc = new StdSchedulerFactory();
-                var s = sc.GetScheduler().GetAwaiter().GetResult();
-
             });
+            services.AddQuartzHostedService(config => config.WaitForJobsToComplete = true);
+            services.AddHostedService<QuartzWeatherUpdaterHostedService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -87,7 +92,7 @@ namespace Server
         private static IServiceCollection ConfigureRepository(IServiceCollection services, IConfiguration configuration)
         {
             var connection = configuration.GetConnectionString("debug");
-            services.AddScoped<IWeatherDiaryRepository>(s => new WeatherDiaryRepository(connection));
+            services.AddTransient<IWeatherDiaryRepository>(s => new WeatherDiaryRepository(connection));
             services.AddDbContext<WeatherDiaryContext>(builder =>
                                                            builder.UseSqlite(connection));
             return services;
