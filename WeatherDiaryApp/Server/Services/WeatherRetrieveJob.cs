@@ -32,6 +32,7 @@ namespace Server.Services
                                        TimeOfDay = TimesOfDay.Evening,
                                        WeatherIndicator = answ
                                    });
+            _logger.LogInformation("Weather saved for Moscow");
             return Task.CompletedTask;
         }
     }
