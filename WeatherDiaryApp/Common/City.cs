@@ -4,7 +4,6 @@ namespace Common
 {
     public class City
     {
-        public City() { }
         public City(string name, TimeSpan utcOffset)
         {
             Name = name;
