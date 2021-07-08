@@ -62,14 +62,14 @@ namespace Database
         {
             using var context = new WeatherDiaryContext(ContextOptions);
             return context.Cities
-                .Select(c => c.Name)
+                .Select(c => c.NameRu)
                 .ToList();
         }
 
         public Common.City GetCity (string name)
         {
             using var context = new WeatherDiaryContext(ContextOptions);
-            var city = context.Cities.FirstOrDefault(c => c.Name == name);
+            var city = context.Cities.FirstOrDefault(c => c.NameRu == name);
             if (city is null)
             {
                 return null;
@@ -81,7 +81,7 @@ namespace Database
         {
             using var context = new WeatherDiaryContext(ContextOptions);
             var user = context.Users.FirstOrDefault(u => u.Email == userEmail);
-            var city = context.Cities.FirstOrDefault(c => c.Name == cityName);
+            var city = context.Cities.FirstOrDefault(c => c.NameRu == cityName);
             if (user is null || city is null)
             {
                 return null;
@@ -89,7 +89,7 @@ namespace Database
             var userCity = context.UserCities
                 .Include(uc => uc.City)
                     .ThenInclude(c => c.WeatherRecords)
-                        .ThenInclude(wr => wr.WeatherIndicator)
+                        .ThenInclude(wr => wr.WeatherStamp)
                 .FirstOrDefault(uc =>
                     uc.UserId == user.Id &&
                     uc.CityId == city.Id &&
@@ -111,7 +111,7 @@ namespace Database
         {
             using var context = new WeatherDiaryContext(ContextOptions);
             var user = context.Users.FirstOrDefault(u => u.Email == userEmail);
-            var city = context.Cities.FirstOrDefault(c => c.Name == cityName);
+            var city = context.Cities.FirstOrDefault(c => c.NameRu == cityName);
             if (user is null || city is null)
             {
                 return null;
@@ -132,7 +132,7 @@ namespace Database
             foreach (var wr in userCity.City.WeatherRecords)
             {
                 context.Entry(wr)
-                    .Reference(wr => wr.WeatherIndicator)
+                    .Reference(wr => wr.WeatherStamp)
                     .Load();
                 context.Entry(wr)
                     .Reference(wr => wr.City)
@@ -164,7 +164,7 @@ namespace Database
             }
             return user.UserCities
                 .Where(uc => !uc.DateEnd.HasValue)
-                .Select(uc => uc.City.Name)
+                .Select(uc => uc.City.NameRu)
                 .ToList();
         }
 
@@ -186,7 +186,7 @@ namespace Database
         {
             var databaseRecord = ConvertToDatabase(record);
             using var context = new WeatherDiaryContext(ContextOptions);
-            var city = context.Cities.FirstOrDefault(c => c.Name == databaseRecord.City.Name);
+            var city = context.Cities.FirstOrDefault(c => c.NameRu == databaseRecord.City.NameRu);
             if (city is null)
             {
                 return;
@@ -200,7 +200,7 @@ namespace Database
         {
             using var context = new WeatherDiaryContext(ContextOptions);
             var user = context.Users.FirstOrDefault(u => u.Email == userEmail);
-            var city = context.Cities.FirstOrDefault(c => c.Name == cityName);
+            var city = context.Cities.FirstOrDefault(c => c.NameRu == cityName);
             if (user is null || city is null)
             {
                 return;
@@ -218,7 +218,7 @@ namespace Database
         {
             using var context = new WeatherDiaryContext(ContextOptions);
             var user = context.Users.FirstOrDefault(u => u.Email == userEmail);
-            var city = context.Cities.FirstOrDefault(c => c.Name == cityName);
+            var city = context.Cities.FirstOrDefault(c => c.NameRu == cityName);
             if (user is null || city is null)
             {
                 return;
@@ -237,20 +237,20 @@ namespace Database
 
         private Common.City ConvertToCommon (City city)
         {
-            return new Common.City { Name = city.Name, TimeZone = TimeSpan.FromHours(city.TimeZone) };
+            return new Common.City { Name = city.NameRu, TimeZone = TimeSpan.FromHours(city.UtcOffset) };
         }
 
-        private Common.WeatherIndicator ConvertToCommon (WeatherIndicator weatherIndicator)
+        private Common.WeatherIndicator ConvertToCommon (WeatherStamp weatherStamp)
         {
             return new Common.WeatherIndicator
             {
-                Cloudy = (Common.Cloudy)weatherIndicator.Cloudy,
-                Phenomena = (Common.Phenomena)weatherIndicator.Phenomena,
-                Precipitation = (Common.Precipitation)weatherIndicator.Precipitation,
-                Pressure = weatherIndicator.Pressure,
-                Temperature = weatherIndicator.Temperature,
-                WindDirection = (Common.WindDirection)weatherIndicator.WindDirection,
-                WindSpeed = weatherIndicator.WindSpeed
+                Cloudy = (Common.Cloudy)weatherStamp.Cloudy,
+                Phenomena = (Common.Phenomena)weatherStamp.Phenomena,
+                Precipitation = (Common.Precipitation)weatherStamp.Precipitation,
+                Pressure = weatherStamp.Pressure,
+                Temperature = weatherStamp.Temperature,
+                WindDirection = (Common.WindDirection)weatherStamp.WindDirection,
+                WindSpeed = weatherStamp.WindSpeed
             };
         }
 
@@ -266,13 +266,13 @@ namespace Database
                 City = ConvertToCommon(weatherRecord.City),
                 Date = weatherRecord.Date,
                 TimeOfDay = (Common.TimesOfDay)weatherRecord.TimeOfDay,
-                WeatherIndicator = ConvertToCommon(weatherRecord.WeatherIndicator)
+                WeatherIndicator = ConvertToCommon(weatherRecord.WeatherStamp)
             };
         }
 
         private City ConvertToDatabase (Common.City city)
         {
-            return new City { Name = city.Name, TimeZone = city.TimeZone.Hours };
+            return new City { NameRu = city.Name, UtcOffset = city.TimeZone.Hours };
         }
 
         private WeatherRecord ConvertToDatabase (Common.WeatherRecord weatherRecord)
@@ -282,13 +282,13 @@ namespace Database
                 City = ConvertToDatabase(weatherRecord.City),
                 Date = weatherRecord.Date,
                 TimeOfDay = (TimesOfDay)weatherRecord.TimeOfDay,
-                WeatherIndicator = ConvertToDatabase(weatherRecord.WeatherIndicator)
+                WeatherStamp = ConvertToDatabase(weatherRecord.WeatherIndicator)
             };
         }
 
-        private WeatherIndicator ConvertToDatabase (Common.WeatherIndicator weatherIndicator)
+        private WeatherStamp ConvertToDatabase (Common.WeatherIndicator weatherIndicator)
         {
-            return new WeatherIndicator
+            return new WeatherStamp
             {
                 Cloudy = (Cloudy)weatherIndicator.Cloudy,
                 Phenomena = (Phenomena)weatherIndicator.Phenomena,

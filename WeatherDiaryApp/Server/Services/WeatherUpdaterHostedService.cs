@@ -88,14 +88,14 @@ namespace Server.Services
             var cities = context.Cities.ToList();
             foreach (var city in cities)
             {
-                var resp = api.GetRecord(city.Name);
+                var resp = api.GetRecord(city.NameRu);
                 var rec = new Database.WeatherRecord()
                           {
                               City = city,
                               CityId = city.Id,
                               Date = DateTime.Today,
                               TimeOfDay = GetTimesOfDay(DateTime.Now.TimeOfDay),
-                              WeatherIndicator = ConvertToDatabaseIndicator(resp)
+                              WeatherStamp = ConvertToDatabaseIndicator(resp)
                           };
                 context.WeatherRecords.Add(rec);
             }
@@ -103,13 +103,13 @@ namespace Server.Services
             context.SaveChanges();
         }
 
-        private static Database.WeatherIndicator ConvertToDatabaseIndicator(Common.WeatherIndicator indicator)
+        private static Database.WeatherStamp ConvertToDatabaseIndicator(Common.WeatherIndicator indicator)
         {
             var phenomena = ConvertPhenomena(indicator.Phenomena);
             var precipitaion = ConvertPrecipitation(indicator.Precipitation);
             var windDir = ConvertWindDirection(indicator.WindDirection);
             var cloudy = ConvertCloudy(indicator.Cloudy);
-            return new Database.WeatherIndicator()
+            return new Database.WeatherStamp()
                    {
                        Cloudy = cloudy,
                        Temperature = indicator.Temperature,

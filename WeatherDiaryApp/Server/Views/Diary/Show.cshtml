@@ -8,7 +8,7 @@
     <h1 class="display-4">Посмотреть дневник погоды</h1>
     <p>Вы выбрали город: @Model.Options.CityName</p>
     <br><br>
-    @if (Model.Records.Count() == 0)
+    @if (!Model.Records.Any())
     {
         <p>В дневнике пока нет записей</p>
     }
@@ -37,7 +37,7 @@
                     <th class="text_details">Облачность</th>
                 }
                 @if (Model.Options.Precipitations)
-                {
+               {
                     <th class="text_details">Осадки</th>
                 }
                 @if (Model.Options.Phenomena)
