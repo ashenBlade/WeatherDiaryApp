@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31105.61
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Server\Server.csproj", "{DD268133-F859-429E-845D-75F73776F1EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherDiary.Server", "WeatherDiary.Server\WeatherDiary.Server.csproj", "{DD268133-F859-429E-845D-75F73776F1EA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{7E4C6A31-2ABC-468C-94C4-9B49C35C94D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherDiary.Tests", "WeatherDiary.Tests\WeatherDiary.Tests.csproj", "{7E4C6A31-2ABC-468C-94C4-9B49C35C94D5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Database", "Database\Database.csproj", "{D4949BCC-BA03-4C4B-A18A-92A46C7F9FD6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherDiary.Data", "WeatherDiary.Data\WeatherDiary.Data.csproj", "{D4949BCC-BA03-4C4B-A18A-92A46C7F9FD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{52DB28DD-3B57-46CA-993C-038FB0E5F15B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherDiary.Domain", "WeatherDiary.Domain\WeatherDiary.Domain.csproj", "{52DB28DD-3B57-46CA-993C-038FB0E5F15B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{9BCAD891-6506-4FDC-80C9-7753A988499A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherDiary.Api", "WeatherDiary.Api\WeatherDiary.Api.csproj", "{9BCAD891-6506-4FDC-80C9-7753A988499A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

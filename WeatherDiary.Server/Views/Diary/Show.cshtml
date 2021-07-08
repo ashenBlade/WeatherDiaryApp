@@ -1,0 +1,253 @@
+﻿@model ShowDiaryViewModel
+@{
+    ViewData["Title"] = "Show";
+    Layout = "_Layout";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Посмотреть дневник погоды</h1>
+    <p>Вы выбрали город: @Model.Options.CityName</p>
+    <br><br>
+    @if (!Model.Records.Any())
+    {
+        <p>В дневнике пока нет записей</p>
+    }
+    else if (Model.NumOfOptions == 0)
+    {
+        <p>Вы не выбрали ни одного показателя погоды</p>
+    }
+    else
+    {
+        <table class="details_table" border="1">
+            <tr>
+                <th class="text_details" rowspan="2">Дата</th>
+                <th class="text_details" colspan="@Model.NumOfOptions">День</th>
+            </tr>
+            <tr>
+                @if (Model.Options.Temperature)
+                {
+                    <th class="text_details">Температура</th>
+                }
+                @if (Model.Options.Pressure)
+                {
+                    <th class="text_details">Давление</th>
+                }
+                @if (Model.Options.Cloudy)
+                {
+                    <th class="text_details">Облачность</th>
+                }
+                @if (Model.Options.Precipitations)
+               {
+                    <th class="text_details">Осадки</th>
+                }
+                @if (Model.Options.Phenomena)
+                {
+                    <th class="text_details">Явления</th>
+                }
+                @if (Model.Options.Wind)
+                {
+                    <th class="text_details">Ветер</th>
+                }
+            </tr>
+
+            @foreach (var item in Model.Records.Where(i => i.TimeOfDay == WeatherDiary.Domain.TimesOfDay.Day))
+            {
+                <tr>
+                    <td class="text_details">
+                        @(item.Date.Day).@(item.Date.Month).@(item.Date.Year)
+                    </td>
+                    @if (Model.Options.Temperature)
+                    {
+                        <td class="text_details">
+                            @item.WeatherStamp.Temperature °C
+                        </td>
+                    }
+                    @if (Model.Options.Pressure)
+                    {
+                        <td class="text_details">
+                            @item.WeatherStamp.Pressure мм рт. ст.
+                        </td>
+                    }
+                    @if (Model.Options.Cloudy)
+                    {
+                        <td class="text_details">
+                            <img src="~/legend/cloudy/@(item.WeatherStamp.Cloudy).png">
+                        </td>
+                    }
+                    @if (Model.Options.Precipitations)
+                    {
+                        <td class="text_details">
+                            <img src="~/legend/precipitations/@(item.WeatherStamp.Precipitation).png">
+                        </td>
+                    }
+                    @if (Model.Options.Phenomena)
+                    {
+                        <td class="text_details">
+                            <img src="~/legend/phenomena/@(item.WeatherStamp.Phenomena).png">
+                        </td>
+                    }
+                    @if (Model.Options.Wind)
+                    {
+                        <td class="text_details">
+                            @item.WeatherStamp.WindSpeed м/с @Model.GetDescription(item.WeatherStamp.WindDirection) <img src="~/legend/wind/@(item.WeatherStamp.WindDirection).png">
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+
+        <table class="details_table" border="1">
+            <tr><th class="text_details" colspan="@Model.NumOfOptions">Вечер</th></tr>
+            <tr>
+                @if (Model.Options.Temperature)
+                {
+                    <th class="text_details">Температура</th>
+                }
+                @if (Model.Options.Pressure)
+                {
+                    <th class="text_details">Давление</th>
+                }
+                @if (Model.Options.Cloudy)
+                {
+                    <th class="text_details">Облачность</th>
+                }
+                @if (Model.Options.Precipitations)
+                {
+                    <th class="text_details">Осадки</th>
+                }
+                @if (Model.Options.Phenomena)
+                {
+                    <th class="text_details">Явления</th>
+                }
+                @if (Model.Options.Wind)
+                {
+                    <th class="text_details">Ветер</th>
+                }
+            </tr>
+
+            @foreach (var item in Model.Records.Where(i => i.TimeOfDay == WeatherDiary.Domain.TimesOfDay.Evening))
+            {
+                <tr>
+                    @if (Model.Options.Temperature)
+                    {
+                        <td class="text_details">
+                            @item.WeatherStamp.Temperature °C
+                        </td>
+                    }
+                    @if (Model.Options.Pressure)
+                    {
+                        <td class="text_details">
+                            @item.WeatherStamp.Pressure мм рт. ст.
+                        </td>
+                    }
+                    @if (Model.Options.Cloudy)
+                    {
+                        <td class="text_details">
+                            <img src="~/legend/cloudy/@(item.WeatherStamp.Cloudy).png">
+                        </td>
+                    }
+                    @if (Model.Options.Precipitations)
+                    {
+                        <td class="text_details">
+                            <img src="~/legend/precipitations/@(item.WeatherStamp.Precipitation).png">
+                        </td>
+                    }
+                    @if (Model.Options.Phenomena)
+                    {
+                        <td class="text_details">
+                            <img src="~/legend/phenomena/@(item.WeatherStamp.Phenomena).png">
+                        </td>
+                    }
+                    @if (Model.Options.Wind)
+                    {
+                        <td class="text_details">
+                            @item.WeatherStamp.WindSpeed м/с @Model.GetDescription(item.WeatherStamp.WindDirection) <img src="~/legend/wind/@(item.WeatherStamp.WindDirection).png">
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    }
+    <br /><br /><br /><br />
+    <table class="details_table" border="1">
+        <tr>
+            <th class="text_details" colspan="2">Облачность</th>
+            <th class="text_details" colspan="2">Осадки</th>
+            <th class="text_details" colspan="2">Явления</th>
+        </tr>
+        <tr>
+            <td class="text_details">
+                <img src="~/legend/cloudy/Cloudless.png">
+            </td>
+            <td class="text_details">Ясно</td>
+            <td class="text_details">
+                <img src="~/legend/phenomena/Hoarfrost.png">
+            </td>
+            <td class="text_details">Иней</td>
+            <td class="text_details">
+                <img src="~/legend/precipitations/Rain.png">
+            </td>
+            <td class="text_details">Дождь</td>
+        </tr>
+        <tr>
+            <td class="text_details">
+                <img src="~/legend/cloudy/PartlyCloud.png">
+            </td>
+            <td class="text_details">Малооблачно</td>
+            <td class="text_details">
+                <img src="~/legend/phenomena/Fog.png">
+            </td>
+            <td class="text_details">Туман</td>
+            <td class="text_details">
+                <img src="~/legend/precipitations/Snow.png">
+            </td>
+            <td class="text_details">Снег</td>
+        </tr>
+        <tr>
+            <td class="text_details">
+                <img src="~/legend/cloudy/AverageCloud.png">
+            </td>
+            <td class="text_details">Облачно</td>
+            <td class="text_details">
+                <img src="~/legend/phenomena/Dew.png">
+            </td>
+            <td class="text_details">Роса</td>
+            <td class="text_details">
+                <img src="~/legend/precipitations/Drizzle.png">
+            </td>
+            <td class="text_details">Морось</td>
+        </tr>
+        <tr>
+            <td class="text_details">
+                <img src="~/legend/cloudy/SolidCloud.png">
+            </td>
+            <td class="text_details">Пасмурно</td>
+            <td class="text_details">
+                <img src="~/legend/phenomena/Thunderstorm.png">
+            </td>
+            <td class="text_details">Гроза</td>
+            <td class="text_details">
+                <img src="~/legend/precipitations/Hail.png">
+            </td>
+            <td class="text_details">Град</td>
+        </tr>
+        <tr>
+            <td class="text_details" colspan="2" rowspan="2"></td>
+            <td class="text_details">
+                <img src="~/legend/phenomena/Snowstorm.png">
+            </td>
+            <td class="text_details">Метель</td>
+            <td class="text_details">
+                <img src="~/legend/precipitations/SnowGroats.png">
+            </td>
+            <td class="text_details">Снежная крупа</td>
+        </tr>
+        <tr>
+            <td class="text_details">
+                <img src="~/legend/phenomena/Ice.png">
+            </td>
+            <td class="text_details">Гололёд</td>
+            <td class="text_details" colspan="2"></td>
+        </tr>
+    </table>
+</div>
