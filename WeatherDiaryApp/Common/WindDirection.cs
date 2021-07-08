@@ -4,6 +4,7 @@ namespace Common
 {
     public enum WindDirection
     {
+        None,
         [Description("С")]
         N,
         [Description("СЗ")]

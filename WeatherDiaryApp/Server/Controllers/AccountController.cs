@@ -52,7 +52,7 @@ namespace Server.Controllers
                 return View(viewModel);
             }
 
-            var user = new User() { Email = dbUser.Email, Password = dbUser.Password };
+            var user = new User(dbUser.Email, dbUser.Password);
 
             await Authenticate(HttpContext, user);
 

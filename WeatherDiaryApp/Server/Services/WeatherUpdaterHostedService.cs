@@ -103,21 +103,21 @@ namespace Server.Services
             context.SaveChanges();
         }
 
-        private static Database.WeatherStamp ConvertToDatabaseIndicator(Common.WeatherIndicator indicator)
+        private static Database.WeatherStamp ConvertToDatabaseIndicator(Common.WeatherStamp stamp)
         {
-            var phenomena = ConvertPhenomena(indicator.Phenomena);
-            var precipitaion = ConvertPrecipitation(indicator.Precipitation);
-            var windDir = ConvertWindDirection(indicator.WindDirection);
-            var cloudy = ConvertCloudy(indicator.Cloudy);
+            var phenomena = ConvertPhenomena(stamp.Phenomena);
+            var precipitaion = ConvertPrecipitation(stamp.Precipitation);
+            var windDir = ConvertWindDirection(stamp.WindDirection);
+            var cloudy = ConvertCloudy(stamp.Cloudy);
             return new Database.WeatherStamp()
                    {
                        Cloudy = cloudy,
-                       Temperature = indicator.Temperature,
+                       Temperature = stamp.Temperature,
                        Phenomena = phenomena,
                        Precipitation = precipitaion,
-                       Pressure = indicator.Pressure,
+                       Pressure = stamp.Pressure,
                        WindDirection = windDir,
-                       WindSpeed = indicator.WindSpeed,
+                       WindSpeed = stamp.WindSpeed,
                    };
         }
 

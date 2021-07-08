@@ -5,16 +5,23 @@ namespace Api
 {
     public class EmptyWeatherApiRequester : IWeatherApiRequester
     {
-        public WeatherIndicator GetRecord(string city)
+        internal static readonly WeatherStamp EmptyStamp = new WeatherStamp(Cloudy.Cloudless,
+                                                                  Phenomena.None,
+                                                                  Precipitation.None,
+                                                                  0,
+                                                                  0,
+                                                                  WindDirection.None,
+                                                                  0);
+        public WeatherStamp GetRecord(string city)
         {
             // Empty
-            return new WeatherIndicator();
+            return EmptyStamp;
         }
 
-        public Task<WeatherIndicator> GetRecordTask(string city)
+        public Task<WeatherStamp> GetRecordTask(string city)
         {
             // Empty
-            return new Task<WeatherIndicator>(() => new WeatherIndicator());
+            return new Task<WeatherStamp>(() => EmptyStamp);
         }
     }
 }

@@ -2,11 +2,11 @@ namespace Common
 {
     public enum Precipitation
     {
-        None,
-        Rain,
-        Hail,
-        Snow,
-        Drizzle,
-        SnowGroats
+        None = 0,
+        Rain = 1,
+        Hail = 2,
+        Snow = 3,
+        Drizzle = 4,
+        SnowGroats = 5
     }
 }

@@ -5,17 +5,17 @@ namespace Common
     public class WeatherRecord
     {
         public WeatherRecord() { }
-        public WeatherRecord(City city, DateTime date, TimesOfDay timeOfDay, WeatherIndicator weatherIndicator)
+        public WeatherRecord(City city, DateTime date, TimesOfDay timeOfDay, WeatherStamp weatherStamp)
         {
             City = city;
             Date = date;
             TimeOfDay = timeOfDay;
-            WeatherIndicator = weatherIndicator;
+            WeatherStamp = weatherStamp;
         }
 
         public City City { get; set; }
         public DateTime Date { get; set; }
         public TimesOfDay TimeOfDay { get; set; }
-        public WeatherIndicator WeatherIndicator { get; set; }
+        public WeatherStamp WeatherStamp { get; set; }
     }
 }

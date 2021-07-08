@@ -2,7 +2,7 @@ namespace Common
 {
     public enum TimesOfDay
     {
-        Day,
-        Evening
+        Day = 0,
+        Evening = 1
     }
 }

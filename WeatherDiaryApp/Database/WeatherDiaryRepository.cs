@@ -240,23 +240,23 @@ namespace Database
             return new Common.City(city.NameRu, TimeSpan.FromHours(city.UtcOffset));
         }
 
-        private Common.WeatherIndicator ConvertToCommon (WeatherStamp weatherStamp)
+        private Common.WeatherStamp ConvertToCommon (WeatherStamp weatherStamp)
         {
-            return new Common.WeatherIndicator
-            {
-                Cloudy = (Common.Cloudy)weatherStamp.Cloudy,
-                Phenomena = (Common.Phenomena)weatherStamp.Phenomena,
-                Precipitation = (Common.Precipitation)weatherStamp.Precipitation,
-                Pressure = weatherStamp.Pressure,
-                Temperature = weatherStamp.Temperature,
-                WindDirection = (Common.WindDirection)weatherStamp.WindDirection,
-                WindSpeed = weatherStamp.WindSpeed
-            };
+            return new Common.WeatherStamp
+           (
+                (Common.Cloudy)weatherStamp.Cloudy,
+                (Common.Phenomena)weatherStamp.Phenomena,
+                (Common.Precipitation)weatherStamp.Precipitation,
+                weatherStamp.Pressure,
+                weatherStamp.Temperature,
+                (Common.WindDirection)weatherStamp.WindDirection,
+                weatherStamp.WindSpeed
+            );
         }
 
         private Common.User ConvertToCommon (User user)
         {
-            return new Common.User { Email = user.Email, Password = user.Password };
+            return new Common.User (user.Email, user.Password);
         }
 
         private Common.WeatherRecord ConvertToCommon (WeatherRecord weatherRecord)
@@ -266,7 +266,7 @@ namespace Database
                 City = ConvertToCommon(weatherRecord.City),
                 Date = weatherRecord.Date,
                 TimeOfDay = (Common.TimesOfDay)weatherRecord.TimeOfDay,
-                WeatherIndicator = ConvertToCommon(weatherRecord.WeatherStamp)
+                WeatherStamp = ConvertToCommon(weatherRecord.WeatherStamp)
             };
         }
 
@@ -282,21 +282,21 @@ namespace Database
                 City = ConvertToDatabase(weatherRecord.City),
                 Date = weatherRecord.Date,
                 TimeOfDay = (TimesOfDay)weatherRecord.TimeOfDay,
-                WeatherStamp = ConvertToDatabase(weatherRecord.WeatherIndicator)
+                WeatherStamp = ConvertToDatabase(weatherRecord.WeatherStamp)
             };
         }
 
-        private WeatherStamp ConvertToDatabase (Common.WeatherIndicator weatherIndicator)
+        private WeatherStamp ConvertToDatabase (Common.WeatherStamp weatherStamp)
         {
             return new WeatherStamp
             {
-                Cloudy = (Cloudy)weatherIndicator.Cloudy,
-                Phenomena = (Phenomena)weatherIndicator.Phenomena,
-                Precipitation = (Precipitation)weatherIndicator.Precipitation,
-                Pressure = weatherIndicator.Pressure,
-                Temperature = weatherIndicator.Temperature,
-                WindDirection = (WindDirection)weatherIndicator.WindDirection,
-                WindSpeed = weatherIndicator.WindSpeed
+                Cloudy = (Cloudy)weatherStamp.Cloudy,
+                Phenomena = (Phenomena)weatherStamp.Phenomena,
+                Precipitation = (Precipitation)weatherStamp.Precipitation,
+                Pressure = weatherStamp.Pressure,
+                Temperature = weatherStamp.Temperature,
+                WindDirection = (WindDirection)weatherStamp.WindDirection,
+                WindSpeed = weatherStamp.WindSpeed
             };
         }
     }

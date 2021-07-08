@@ -5,7 +5,7 @@ namespace Api
 {
     public interface IWeatherApiRequester
     {
-        WeatherIndicator GetRecord(string city);
-        Task<WeatherIndicator> GetRecordTask(string city);
+        WeatherStamp GetRecord(string city);
+        Task<WeatherStamp> GetRecordTask(string city);
     }
 }

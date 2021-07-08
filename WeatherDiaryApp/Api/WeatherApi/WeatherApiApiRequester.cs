@@ -24,7 +24,7 @@ namespace Api.WeatherApi
         private static Uri GetRequestUri(string city) =>
             new Uri(GetRequestUrl(city));
 
-        public WeatherIndicator GetRecord(string city)
+        public WeatherStamp GetRecord(string city)
         {
             var url = GetRequestUrl(city);
             string responseJson;
@@ -36,14 +36,14 @@ namespace Api.WeatherApi
             }
             catch (Exception e)
             {
-                return new WeatherIndicator();
+                return EmptyWeatherApiRequester.EmptyStamp;
             }
             var responseRaw = JsonSerializer.Deserialize<WeatherApiApiResponseRaw>(responseJson);
             var record = WeatherApiRawResponseConverter.Convert(responseRaw);
             return record;
         }
 
-        public Task<WeatherIndicator> GetRecordTask(string city)
+        public Task<WeatherStamp> GetRecordTask(string city)
         {
             throw new System.NotImplementedException();
         }

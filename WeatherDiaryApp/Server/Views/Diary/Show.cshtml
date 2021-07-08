@@ -59,37 +59,37 @@
                     @if (Model.Options.Temperature)
                     {
                         <td class="text_details">
-                            @item.WeatherIndicator.Temperature °C
+                            @item.WeatherStamp.Temperature °C
                         </td>
                     }
                     @if (Model.Options.Pressure)
                     {
                         <td class="text_details">
-                            @item.WeatherIndicator.Pressure мм рт. ст.
+                            @item.WeatherStamp.Pressure мм рт. ст.
                         </td>
                     }
                     @if (Model.Options.Cloudy)
                     {
                         <td class="text_details">
-                            <img src="~/legend/cloudy/@(item.WeatherIndicator.Cloudy).png">
+                            <img src="~/legend/cloudy/@(item.WeatherStamp.Cloudy).png">
                         </td>
                     }
                     @if (Model.Options.Precipitations)
                     {
                         <td class="text_details">
-                            <img src="~/legend/precipitations/@(item.WeatherIndicator.Precipitation).png">
+                            <img src="~/legend/precipitations/@(item.WeatherStamp.Precipitation).png">
                         </td>
                     }
                     @if (Model.Options.Phenomena)
                     {
                         <td class="text_details">
-                            <img src="~/legend/phenomena/@(item.WeatherIndicator.Phenomena).png">
+                            <img src="~/legend/phenomena/@(item.WeatherStamp.Phenomena).png">
                         </td>
                     }
                     @if (Model.Options.Wind)
                     {
                         <td class="text_details">
-                            @item.WeatherIndicator.WindSpeed м/с @Model.GetDescription(item.WeatherIndicator.WindDirection) <img src="~/legend/wind/@(item.WeatherIndicator.WindDirection).png">
+                            @item.WeatherStamp.WindSpeed м/с @Model.GetDescription(item.WeatherStamp.WindDirection) <img src="~/legend/wind/@(item.WeatherStamp.WindDirection).png">
                         </td>
                     }
                 </tr>
@@ -131,37 +131,37 @@
                     @if (Model.Options.Temperature)
                     {
                         <td class="text_details">
-                            @item.WeatherIndicator.Temperature °C
+                            @item.WeatherStamp.Temperature °C
                         </td>
                     }
                     @if (Model.Options.Pressure)
                     {
                         <td class="text_details">
-                            @item.WeatherIndicator.Pressure мм рт. ст.
+                            @item.WeatherStamp.Pressure мм рт. ст.
                         </td>
                     }
                     @if (Model.Options.Cloudy)
                     {
                         <td class="text_details">
-                            <img src="~/legend/cloudy/@(item.WeatherIndicator.Cloudy).png">
+                            <img src="~/legend/cloudy/@(item.WeatherStamp.Cloudy).png">
                         </td>
                     }
                     @if (Model.Options.Precipitations)
                     {
                         <td class="text_details">
-                            <img src="~/legend/precipitations/@(item.WeatherIndicator.Precipitation).png">
+                            <img src="~/legend/precipitations/@(item.WeatherStamp.Precipitation).png">
                         </td>
                     }
                     @if (Model.Options.Phenomena)
                     {
                         <td class="text_details">
-                            <img src="~/legend/phenomena/@(item.WeatherIndicator.Phenomena).png">
+                            <img src="~/legend/phenomena/@(item.WeatherStamp.Phenomena).png">
                         </td>
                     }
                     @if (Model.Options.Wind)
                     {
                         <td class="text_details">
-                            @item.WeatherIndicator.WindSpeed м/с @Model.GetDescription(item.WeatherIndicator.WindDirection) <img src="~/legend/wind/@(item.WeatherIndicator.WindDirection).png">
+                            @item.WeatherStamp.WindSpeed м/с @Model.GetDescription(item.WeatherStamp.WindDirection) <img src="~/legend/wind/@(item.WeatherStamp.WindDirection).png">
                         </td>
                     }
                 </tr>

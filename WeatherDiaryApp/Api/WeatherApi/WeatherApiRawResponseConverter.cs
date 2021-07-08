@@ -57,17 +57,16 @@ namespace Api.WeatherApi
             CodeToPhenomenaAndPrecipitationsDictionary.Add(1279, Tuple.Create(Phenomena.Thunderstorm, Precipitation.Snow));
         }
 
-        internal static WeatherIndicator Convert(WeatherApiApiResponseRaw response)
+        internal static WeatherStamp Convert(WeatherApiApiResponseRaw response)
         {
-            var ConvertedIndicator = new WeatherIndicator();
-            ConvertedIndicator.Pressure = (int)response.Current.Pressure;
-            ConvertedIndicator.Temperature = (int)response.Current.Temperature;
-            ConvertedIndicator.WindSpeed = (int)response.Current.WindSpeed;
-            ConvertedIndicator.Cloudy = ConvertCloudy(response);
-            ConvertedIndicator.WindDirection = ConvertWindDirection(response);
-            ConvertedIndicator.Precipitation = ConvertPrecipitations(response);
-            ConvertedIndicator.Phenomena = ConvertPhenomena(response);
-            return ConvertedIndicator;
+            var pressure = (int)response.Current.Pressure;
+            var temperature = (int)response.Current.Temperature;
+            var windSpeed = (int)response.Current.WindSpeed;
+            var cloudy = ConvertCloudy(response);
+            var windDirection = ConvertWindDirection(response);
+            var precipitation = ConvertPrecipitations(response);
+            var phenomena = ConvertPhenomena(response);
+            return new WeatherStamp(cloudy, phenomena, precipitation, pressure, temperature, windDirection, windSpeed);
         }
 
         private static Cloudy ConvertCloudy(WeatherApiApiResponseRaw response)
