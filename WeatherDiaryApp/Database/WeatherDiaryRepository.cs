@@ -237,7 +237,7 @@ namespace Database
 
         private Common.City ConvertToCommon (City city)
         {
-            return new Common.City { Name = city.NameRu, TimeZone = TimeSpan.FromHours(city.UtcOffset) };
+            return new Common.City(city.NameRu, TimeSpan.FromHours(city.UtcOffset));
         }
 
         private Common.WeatherIndicator ConvertToCommon (WeatherStamp weatherStamp)
@@ -272,7 +272,7 @@ namespace Database
 
         private City ConvertToDatabase (Common.City city)
         {
-            return new City { NameRu = city.Name, UtcOffset = city.TimeZone.Hours };
+            return new City { NameRu = city.Name, UtcOffset = city.TimeZone.BaseUtcOffset.Hours };
         }
 
         private WeatherRecord ConvertToDatabase (Common.WeatherRecord weatherRecord)

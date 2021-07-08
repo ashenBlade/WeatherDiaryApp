@@ -5,13 +5,12 @@ namespace Common
     public class City
     {
         public City() { }
-        public City(string name, TimeSpan timeZone)
+        public City(string name, TimeSpan utcOffset)
         {
             Name = name;
-            TimeZone = timeZone;
+            TimeZone = TimeZoneInfo.CreateCustomTimeZone(utcOffset.ToString(), utcOffset, null, null);
         }
-
-        public string Name { get; set; }
-        public TimeSpan TimeZone { get; set; }
+        public TimeZoneInfo TimeZone { get; private set; }
+        public string Name { get; private set; }
     }
 }

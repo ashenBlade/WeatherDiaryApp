@@ -26,16 +26,6 @@ namespace Server.Services
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var answ = _requester.GetRecord("Moscow");
-            _repository.SaveRecord(new Common.WeatherRecord()
-                                   {
-                                       City = new Common.City() { Name = "Казань"},
-                                       Date = DateTime.Now,
-                                       TimeOfDay = TimesOfDay.Evening,
-                                       WeatherIndicator = answ
-                                   });
-            _logger.LogInformation($"Weather saved for Moscow {answ}");
-
         }
     }
 }
